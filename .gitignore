@@ -1,3 +1,7 @@
+# Ignore platform-dependent files
 bin/
 build/
 lib/*.a
+
+# Ignore the executable itself
+timetable

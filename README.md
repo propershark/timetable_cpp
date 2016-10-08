@@ -7,6 +7,8 @@ Purveyor of schedule information for transit agencies via GTFS feeds and WAMP pr
 
 This is the only compiled part of the server system. As such, it takes a bit more effort to install and set up. These are the steps I took to get a working application.
 
+*NOTE: This project is configured to be compiled with `clang`. To use a different compiler (untested), simply edit line 5 of `Makefile` to be `CXX ?= compiler_name`. There are currently no compiler-specific flags, so everything else should work as-is.*
+
 First, you'll need to download and compile [wamped](https://github.com/alvistar/wamped) and its dependency, [mpack](https://github.com/alvistar/mpack). It's easiest to clone msgpack into the `mpack` folder in `wamped`.
 
 ```bash

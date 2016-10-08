@@ -6,7 +6,7 @@ CXX ?= clang
 # Extension of source files used in the project
 SRC_EXT = cc
 # Path to the source directory, relative to the makefile
-SRC_PATH = .
+SRC_PATH = src/
 # Space-separated pkg-config libraries used by this project
 LIBS =
 # General compiler flags
