@@ -3,5 +3,8 @@ bin/
 build/
 lib/*.a
 
+# Ignore data files
+data/
+
 # Ignore the executable itself
 timetable

@@ -18,7 +18,7 @@ DCOMPILE_FLAGS = -D DEBUG
 # Add additional include paths
 INCLUDES = -I$(SRC_PATH) -Iinclude/
 # General linker settings
-LINK_FLAGS = -Llib/ -lwamped -lmpack -lmpackcpp
+LINK_FLAGS = -Llib/ -lwamped -lmpack -lmpackcpp -lsqlite3
 # Additional release-specific linker settings
 RLINK_FLAGS =
 # Additional debug-specific linker settings
