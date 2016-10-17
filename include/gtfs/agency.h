@@ -6,8 +6,9 @@
 
 
 namespace GTFS {
-  class Agency {
+  class Agency : public ObjectBase<Agency, std::string, std::string, std::string, std::string, std::string, std::string> {
     public:
+      static std::string table_name;
       // Unique identifier for the agency
       std::string id;
       // Humanized name of the agency
@@ -34,6 +35,8 @@ namespace GTFS {
           << "\tTZ: " << a.timezone << "\n"
           << "\tLang: " << a.language << "\n"
           << "\tPhone: " << a.phone << "\n";
-      }
+      };
   };
+
+  std::string Agency::table_name = "agencies";
 }
