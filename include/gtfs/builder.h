@@ -23,9 +23,4 @@ namespace GTFS {
         return result_list;
       }
   };
-
-
-  // TODO: Imply attribute types?
-  typedef Builder<Route, std::string, std::string, std::string, std::string, std::string, std::string, std::string, std::string> route_builder_t;
-  route_builder_t route_builder;
 }

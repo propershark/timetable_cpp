@@ -10,6 +10,8 @@ void setup() {
 
   // auto routes = GTFS::Route::where("route_short_name = '2A'");
   auto routes = GTFS::Route::all();
+  for(auto&& route : routes)
+    std::cout << route;
 
   GTFS::close_db();
 }

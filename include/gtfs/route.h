@@ -9,8 +9,9 @@
 
 
 namespace GTFS {
-  class Route {
+  class Route : public ObjectBase<Route, std::string, std::string, std::string, std::string, std::string, std::string, std::string, std::string> {
     public:
+      static std::string table_name;
       // Unique identifier for the route
       std::string id;
       // Identifier of the Agency that owns the route
@@ -32,25 +33,6 @@ namespace GTFS {
       Route(std::string id, std::string agency, std::string sn, std::string ln, std::string desc, std::string type, std::string color, std::string text) : id(id), agency_id(agency), short_name(sn), long_name(ln), description(desc), type(type), color(color), text_color(text) {};
 
 
-      static std::vector<Route> all() {
-        route_builder.reset();
-        current_db() << "SELECT * FROM routes;"
-          >> route_builder;
-
-        return route_builder.results();
-      };
-
-      static std::vector<Route> where(std::string filter) {
-        route_builder.reset();
-        std::stringstream query;
-        query << "SELECT * FROM routes WHERE (" << filter << ");";
-        current_db() << query.str()
-          >> route_builder;
-
-        return route_builder.results();
-      };
-
-
       // Standard stream output
       friend std::ostream& operator<<(std::ostream& os, const Route& r) {
         return os << "Route: \n"
@@ -63,4 +45,6 @@ namespace GTFS {
           << "\tText Color: " << r.text_color << "\n";
       };
   };
+
+  std::string Route::table_name = "routes";
 }
