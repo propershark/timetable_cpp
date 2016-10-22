@@ -13,23 +13,29 @@ namespace GTFS {
       ObjectBase() = default;
 
       static std::vector<T> all() {
-        builder_t object_builder{};
         std::stringstream query;
         query << "SELECT * FROM " << T::table_name << ";";
         current_db() << query.str()
-          >> object_builder;
+          >> object_builder();
 
-        return object_builder.results();
+        return object_builder().results();
       };
 
       static std::vector<T> where(std::string filter) {
-        builder_t object_builder{};
         std::stringstream query;
-        query << "SELECT * FROM " << T::table_name << " WHERE (" << filter << ");";
+        query << "SELECT * FROM " << T::table_name << " WHERE (?);";
         current_db() << query.str()
-          >> object_builder;
+          << filter
+          >> object_builder();
 
-        return object_builder.results();
+        return object_builder().results();
+      };
+
+
+    private:
+      static builder_t& object_builder() {
+        static builder_t builder{};
+        return builder;
       };
   };
 }
