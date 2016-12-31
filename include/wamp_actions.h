@@ -58,10 +58,11 @@ template<typename Proc>
 class WampRegisterAction : public WampAction {
   public:
     Proc procedure;
+    TRegisterCallback callback;
 
-    WampRegisterAction(std::string topic, Proc p) : procedure(p), base(topic, Action::REGISTER) {};
+    WampRegisterAction(std::string topic, Proc p, TRegisterCallback cb = nullptr) : procedure(p), callback(cb), base(topic, Action::REGISTER) {};
 
     void perform(Wamp* client) {
-      client->registerProcedure(topic, procedure);
+      client->registerProcedure(topic, procedure, callback);
     };
 };
