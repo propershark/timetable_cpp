@@ -23,14 +23,19 @@ namespace GTFS {
         return object_builder().results();
       };
 
-      template<typename... Args>
-      static std::vector<T> where(std::string filter_str, Args... filter_binds) {
-        std::stringstream query;
-        query << "SELECT * FROM " << T::table_name << " WHERE (" << filter_str << ");";
-        (current_db() << query.str() << ... << filter_binds)
+      template<typename... BindTypes>
+      static std::vector<T> query(std::string query_str, BindTypes... binds) {
+        (current_db() << query_str << ... << binds)
         >> object_builder();
 
         return object_builder().results();
+      }
+
+      template<typename... BindTypes>
+      static std::vector<T> where(std::string filter_str, BindTypes... binds) {
+        std::stringstream ss;
+        ss << "SELECT * FROM " << T::table_name << " WHERE (" << filter_str << ");";
+        return query(ss.str(), std::forward<BindTypes&&>(binds)...);
       };
 
       static const std::string& class_name() {
