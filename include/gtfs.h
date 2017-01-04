@@ -1,3 +1,5 @@
+#pragma once
+
 #include "gtfs/decls.h"
 #include "gtfs/config.h"
 #include "gtfs/builder.h"

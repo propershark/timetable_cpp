@@ -1,11 +1,12 @@
 #include <iostream>
 #include <sstream>
+#include <vector>
 
 #include "datetime.h"
+#include "timetable.h"
 #include "transport.h"
 #include "modern_sqlite.h"
 #include "gtfs.h"
-#include "visit.h"
 
 
 void setup() {
@@ -15,16 +16,17 @@ void setup() {
 }
 
 
-int next_visits(std::string arg1, std::string arg2, DateTime timestamp, int count) {
+MsgPackArr next_visits(std::string route, std::string stop_code, DateTime timestamp, int count) {
   std::cout << "Got call request\n"
-  << "Arg1 " << arg1 << "\n"
-  << "Arg2 " << arg2 << "\n"
-  << "Time " << timestamp << "\n"
+  << "Route " << route << "\n"
+  << "Stop " << stop_code << "\n"
+  << "Time " << timestamp.date << " " << timestamp.time << "\n"
   << "Count " << count << "\n";
 
   return 1;
 }
-int next_visit(std::string arg1, std::string arg2, DateTime ts) { return next_visits(arg1, arg2, ts, 1); }
+MsgPackArr next_visit(std::string arg1, std::string arg2, DateTime ts) { return next_visits(arg1, arg2, ts, 1); }
+
 
 int last_visits(std::string arg1, std::string arg2, DateTime timestamp, int count) {
   std::cout << "Got call request\n"
@@ -41,8 +43,7 @@ int last_visit(std::string arg1, std::string arg2, DateTime ts) { return last_vi
 int main() {
   Transport t("ws://shark-nyc1.transio.us:8080/ws");
 
-  GTFS::use_db("data/citybus.db");
-  setup();
+  Timetable::initialize("data/citybus.db");
 
   t.procedure("timetable.next_visit",   next_visit);
   t.procedure("timetable.next_visits",  next_visits);

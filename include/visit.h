@@ -1,5 +1,7 @@
 #pragma once
 
+#include "gtfs.h"
+
 class Visit {
   public:
     // Arrival time of the vehicle to this visit
@@ -8,6 +10,7 @@ class Visit {
     std::string departure;
 
     Visit(std::string arv, std::string dpt) : arrival(arv), departure(dpt) {};
+    Visit(GTFS::StopTime st) : arrival(st.arrival_time), departure(st.departure_time) {};
 
     operator MsgPack() {
       return MsgPackArr(*this);

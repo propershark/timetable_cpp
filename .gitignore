@@ -7,4 +7,4 @@ lib/*.a
 data/
 
 # Ignore the executable itself
-timetable
+/timetable
