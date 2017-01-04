@@ -1,50 +1,35 @@
 #pragma once
 
-#include <unordered_map>
+#include <map>
 
-#include "minicsv.h"
-
-#include "timetable/route.h"
-#include "timetable/stop.h"
-#include "timetable/visit.h"
-
+#include "timetable/types.h"
 
 namespace Timetable {
-  std::unordered_map<Route, Trip> schedule;
-  std::unordered_map<std::string, Trip> trip_list;
-  std::unordered_map<std::string, Stop> stop_list;
+  struct TripTimestamp {
+    Trip trip;
+    std::string departure_time;
 
-  void initialize(std::string gtfs_archive) {
-    mini::csv::ifstream stops_is("data/stops.txt");
-    stops_is.set_delimiter(',', "$$");
-    stops_is.read_line();
-    while(stops_is.read_line()) {
-      Stop s;
-      stops_is >> s.id >> s.code >> s.name;
-      stop_list[s.id] = s;
-    }
+    TripTimestamp(Trip t, std::string depart) : trip(t), departure_time(depart) {};
+    TripTimestamp(Visit v) : TripTimestamp(v.trip, v.departure) {};
 
-    stops_is.close();
+    friend bool operator <(const TripTimestamp& a, const TripTimestamp& b) {
+      if(a.trip == b.trip) return a.departure_time < b.departure_time;
+      return a.trip.id < b.trip.id;
+    };
+  };
 
-    mini::csv::ifstream stis("data/stop_times.txt");
-    stis.set_delimiter(',', "$$");
-    stis.read_line();
-    while(stis.read_line()) {
-      std::string trip_id;
-      stis >> trip_id;
+  class Timetable {
+    public:
+      std::map<TripTimestamp, Visit> visit_list;
+      using visit_iterator = std::map<TripTimestamp, Visit>::iterator;
 
-      Visit v;
-      std::string stop_id;
-      stis >> v.arrival >> v.departure >> stop_id >> v.index >> v.pickup_type >> v.dropoff_type >> v.distance_traveled;
-      v.stop = stop_list[stop_id];
+      void add_visit(Visit v) {
+        visit_list[v] = v;
+      };
 
-      trip_list[trip_id].push_back(v);
-    }
-
-    stis.close();
-
-    for(auto&& trip : trip_list) {
-      std::cout << trip.first << ":" << trip.second.size() << "\n";
-    }
+      visit_iterator visits_after(Trip t, std::string departure) {
+        TripTimestamp tt = { t, departure };
+        return visit_list.lower_bound(tt);
+      };
   };
 }
