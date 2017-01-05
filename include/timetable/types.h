@@ -18,8 +18,6 @@ namespace Timetable {
     public:
       std::string id;
       std::string route_id;
-      std::string start_time;
-      std::string end_time;
 
       Trip(std::string route, std::string id) : route_id(route), id(id) {};
 
