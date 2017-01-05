@@ -10,8 +10,6 @@ namespace Timetable {
       Route() = default;
       Route(std::string id) : id(id) {};
 
-      Route inc() const { Route temp = *this; temp.id += "a"; return temp; };
-
       friend bool operator ==(const Route& a, const Route& b) { return a.id == b.id; };
       friend bool operator !=(const Route& a, const Route& b) { return !(a == b); };
   };
@@ -19,14 +17,11 @@ namespace Timetable {
   class Trip {
     public:
       std::string id;
+      std::string route_id;
       std::string start_time;
       std::string end_time;
-      Route route;
 
-      Trip() = default;
-      Trip(std::string id) : id(id) {};
-
-      Trip inc() const { Trip temp = *this; temp.id += "a"; return temp; };
+      Trip(std::string route, std::string id) : route_id(route), id(id) {};
 
       friend bool operator ==(const Trip& a, const Trip& b) { return a.id == b.id; };
       friend bool operator !=(const Trip& a, const Trip& b) { return !(a == b); };
@@ -42,34 +37,36 @@ namespace Timetable {
       Stop() = default;
       Stop(std::string id) : id(id) {};
 
-      friend bool operator ==(const Stop& a, const Stop& b) { return a.id == b.id; };
-      friend bool operator !=(const Stop& a, const Stop& b) { return !(a == b); };
+      friend bool operator ==(Stop& a, Stop& b) { return a.id == b.id; };
+      friend bool operator !=(Stop& a, Stop& b) { return !(a == b); };
   };
 
   class Visit {
     public:
-      Trip trip;
+      std::string route_id;
+      std::string trip_id;
+      std::string stop_id;
       std::string arrival;
       std::string departure;
-      Stop stop;
-      int index;
-      int pickup_type;
-      int dropoff_type;
-      float dist_traveled;
+      int         index;
+      int         pickup_type;
+      int         dropoff_type;
+      float       dist_traveled;
 
       Visit() = default;
-      Visit(Trip t, std::string departure) : trip(t), departure(departure) {};
+      Visit(std::string route, std::string trip, std::string stop, std::string depart) : route_id(route), trip_id(trip), stop_id(stop), departure(depart) {};
 
-      friend bool operator ==(const Visit& a, const Visit& b) {
-        return a.trip           == b.trip
+      friend bool operator ==(Visit& a, Visit& b) {
+        return a.route_id       == b.route_id
+            && a.trip_id        == b.trip_id
+            && a.stop_id        == b.stop_id
             && a.arrival        == b.arrival
             && a.departure      == b.departure
-            && a.stop           == b.stop
             && a.index          == b.index
             && a.pickup_type    == b.pickup_type
             && a.dropoff_type   == b.dropoff_type
             && a.dist_traveled  == b.dist_traveled;
       };
-      friend bool operator !=(const Visit& a, const Visit& b) { return !(a == b); };
+      friend bool operator !=(Visit& a, Visit& b) { return !(a == b); };
   };
 }
