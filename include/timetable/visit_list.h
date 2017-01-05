@@ -5,8 +5,8 @@
 #include "timetable/types.h"
 
 namespace Timetable {
-  std::string next(std::string arg) { std::string tmp = arg; tmp.back()++; return tmp; };
-  std::string prev(std::string arg) { std::string tmp = arg; tmp.back()--; return tmp; };
+  inline std::string next(std::string arg) { std::string tmp = arg; tmp.back()++; return tmp; };
+  inline std::string prev(std::string arg) { std::string tmp = arg; tmp.back()--; return tmp; };
 
   struct visit_list_key {
     std::string route;
