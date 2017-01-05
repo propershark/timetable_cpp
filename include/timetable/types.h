@@ -10,6 +10,8 @@ namespace Timetable {
       Route() = default;
       Route(std::string id) : id(id) {};
 
+      Route inc() const { Route temp = *this; temp.id += "a"; return temp; };
+
       friend bool operator ==(const Route& a, const Route& b) { return a.id == b.id; };
       friend bool operator !=(const Route& a, const Route& b) { return !(a == b); };
   };
@@ -23,6 +25,8 @@ namespace Timetable {
 
       Trip() = default;
       Trip(std::string id) : id(id) {};
+
+      Trip inc() const { Trip temp = *this; temp.id += "a"; return temp; };
 
       friend bool operator ==(const Trip& a, const Trip& b) { return a.id == b.id; };
       friend bool operator !=(const Trip& a, const Trip& b) { return !(a == b); };

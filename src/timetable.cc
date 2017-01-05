@@ -24,23 +24,25 @@ int main() {
 
   Timetable::Timetable tt;
 
-  tt.add_visit({ Timetable::Trip("111"), "001" });
-  tt.add_visit({ Timetable::Trip("222"), "001" });
-  tt.add_visit({ Timetable::Trip("222"), "002" });
-  tt.add_visit({ Timetable::Trip("111"), "003" });
-  tt.add_visit({ Timetable::Trip("333"), "001" });
-  tt.add_visit({ Timetable::Trip("111"), "002" });
-  tt.add_visit({ Timetable::Trip("111"), "001" });
-  tt.add_visit({ Timetable::Trip("111"), "101" });
-  tt.add_visit({ Timetable::Trip("111"), "100" });
-  tt.add_visit({ Timetable::Trip("555"), "099" });
-  tt.add_visit({ Timetable::Trip("111"), "005" });
-  tt.add_visit({ Timetable::Trip("111"), "007" });
-  tt.add_visit({ Timetable::Trip("111"), "006" });
+  tt.add_visit({ { "Trip1" }, "Stop001" });
+  tt.add_visit({ { "Trip2" }, "Stop001" });
+  tt.add_visit({ { "Trip2" }, "Stop002" });
+  tt.add_visit({ { "Trip1" }, "Stop003" });
+  tt.add_visit({ { "Trip3" }, "Stop001" });
+  tt.add_visit({ { "Trip1" }, "Stop002" });
+  tt.add_visit({ { "Trip1" }, "Stop001" });
+  tt.add_visit({ { "Trip1" }, "Stop101" });
+  tt.add_visit({ { "Trip1" }, "Stop100" });
+  tt.add_visit({ { "Trip5" }, "Stop099" });
+  tt.add_visit({ { "Trip1" }, "Stop005" });
+  tt.add_visit({ { "Trip1" }, "Stop007" });
+  tt.add_visit({ { "Trip1" }, "Stop006" });
 
-  auto iterator = tt.visits_before({{"222"}, "004"});
-  for(; iterator != tt.visit_list.rend(); iterator++) {
-    auto visit = iterator->second;
+  auto iterator = tt.visits_before({{"Trip2"}, "Stop004"});
+  auto start = iterator.first;
+  auto end   = iterator.second;
+  for(; start != end; start++) {
+    auto visit = start->second;
     std::cout << visit.trip.id << "-" << visit.departure << "\n";
   }
   // Timetable::Timetable t("data/");
