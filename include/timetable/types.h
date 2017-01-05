@@ -10,7 +10,8 @@ namespace Timetable {
       Route() = default;
       Route(std::string id) : id(id) {};
 
-      bool operator ==(const Route other) const { return id == other.id; };
+      friend bool operator ==(const Route& a, const Route& b) { return a.id == b.id; };
+      friend bool operator !=(const Route& a, const Route& b) { return !(a == b); };
   };
 
   class Trip {
@@ -23,7 +24,8 @@ namespace Timetable {
       Trip() = default;
       Trip(std::string id) : id(id) {};
 
-      bool operator ==(const Trip other) const { return id == other.id; };
+      friend bool operator ==(const Trip& a, const Trip& b) { return a.id == b.id; };
+      friend bool operator !=(const Trip& a, const Trip& b) { return !(a == b); };
   };
 
   class Stop {
@@ -36,7 +38,8 @@ namespace Timetable {
       Stop() = default;
       Stop(std::string id) : id(id) {};
 
-      bool operator ==(const Stop other) const { return id == other.id; };
+      friend bool operator ==(const Stop& a, const Stop& b) { return a.id == b.id; };
+      friend bool operator !=(const Stop& a, const Stop& b) { return !(a == b); };
   };
 
   class Visit {
@@ -53,31 +56,16 @@ namespace Timetable {
       Visit() = default;
       Visit(Trip t, std::string departure) : trip(t), departure(departure) {};
 
-      bool operator ==(const Visit other) const {
-        return trip           == other.trip
-            && arrival        == other.arrival
-            && departure      == other.departure
-            && stop           == other.stop
-            && index          == other.index
-            && pickup_type    == other.pickup_type
-            && dropoff_type   == other.dropoff_type
-            && dist_traveled  == other.dist_traveled;
+      friend bool operator ==(const Visit& a, const Visit& b) {
+        return a.trip           == b.trip
+            && a.arrival        == b.arrival
+            && a.departure      == b.departure
+            && a.stop           == b.stop
+            && a.index          == b.index
+            && a.pickup_type    == b.pickup_type
+            && a.dropoff_type   == b.dropoff_type
+            && a.dist_traveled  == b.dist_traveled;
       };
+      friend bool operator !=(const Visit& a, const Visit& b) { return !(a == b); };
   };
 }
-
-
-template<>
-struct std::hash<Timetable::Route> {
-  std::size_t operator()(Timetable::Route r) { return std::hash<std::string>{}(r.id); };
-};
-
-// template<>
-// struct std::hash<Timetable::Trip> {
-//   std::size_t operator()(Timetable::Trip t) { return std::hash<std::string>{}(t.id); };
-// };
-
-template<>
-struct std::hash<Timetable::Stop> {
-  std::size_t operator()(Timetable::Stop s) { return std::hash<std::string>{}(s.id); };
-};

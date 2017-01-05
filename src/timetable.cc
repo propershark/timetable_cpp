@@ -34,12 +34,12 @@ int main() {
   tt.add_visit({ Timetable::Trip("111"), "101" });
   tt.add_visit({ Timetable::Trip("111"), "100" });
   tt.add_visit({ Timetable::Trip("555"), "099" });
-  tt.add_visit({ Timetable::Trip("111"), "001" });
-  tt.add_visit({ Timetable::Trip("111"), "001" });
-  tt.add_visit({ Timetable::Trip("111"), "001" });
+  tt.add_visit({ Timetable::Trip("111"), "005" });
+  tt.add_visit({ Timetable::Trip("111"), "007" });
+  tt.add_visit({ Timetable::Trip("111"), "006" });
 
-  auto iterator = tt.visits_after({"222"}, "004");
-  for(; iterator != tt.visit_list.end(); iterator++) {
+  auto iterator = tt.visits_before({{"222"}, "004"});
+  for(; iterator != tt.visit_list.rend(); iterator++) {
     auto visit = iterator->second;
     std::cout << visit.trip.id << "-" << visit.departure << "\n";
   }
