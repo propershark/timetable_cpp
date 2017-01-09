@@ -10,7 +10,7 @@ class Visit {
     std::string departure;
 
     Visit(std::string arv, std::string dpt) : arrival(arv), departure(dpt) {};
-    Visit(GTFS::StopTime st) : arrival(st.arrival_time), departure(st.departure_time) {};
+    Visit(gtfs::stop_time st) : arrival(st.arrival_time), departure(st.departure_time) {};
 
     operator MsgPack() {
       return MsgPackArr(*this);
