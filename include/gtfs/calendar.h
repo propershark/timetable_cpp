@@ -8,7 +8,6 @@
 namespace gtfs {
   class calendar {
     static csv_parser<calendar> parser;
-    static type_map_t type_map;
 
     public:
       static std::string file_name;
@@ -36,22 +35,22 @@ namespace gtfs {
           << "\tService: " << c.service_id << "\n"
           << "\tMTWTFSS\n\t"
           << c.monday << c.tuesday << c.wednesday << c.thursday << c.friday << c.saturday << c.sunday << "\n"
-          << "\Start Date: " << c.start_date << "\n"
+          << "\tStart Date: " << c.start_date << "\n"
           << "\tEnd Date: " << c.end_date << "\n";
       };
   };
 
   std::string calendar::file_name = "calendar.txt";
-  type_map_t calendar::type_map = {
-    {"service_id",  type::t_string},
-    {"monday",      type::t_bool},
-    {"tuesday",     type::t_bool},
-    {"wednesday",   type::t_bool},
-    {"thursday",    type::t_bool},
-    {"friday",      type::t_bool},
-    {"saturday",    type::t_bool},
-    {"sunday",      type::t_bool},
-    {"start_date",  type::t_string},
-    {"end_date",    type::t_string}
-  };
+  csv_parser<calendar> calendar::parser = {{
+    { "service_id",  field_mapping<calendar, std::string, &calendar::service_id>()  },
+    { "monday",      field_mapping<calendar, bool,        &calendar::monday>()      },
+    { "tuesday",     field_mapping<calendar, bool,        &calendar::tuesday>()     },
+    { "wednesday",   field_mapping<calendar, bool,        &calendar::wednesday>()   },
+    { "thursday",    field_mapping<calendar, bool,        &calendar::thursday>()    },
+    { "friday",      field_mapping<calendar, bool,        &calendar::friday>()      },
+    { "saturday",    field_mapping<calendar, bool,        &calendar::saturday>()    },
+    { "sunday",      field_mapping<calendar, bool,        &calendar::sunday>()      },
+    { "start_date",  field_mapping<calendar, std::string, &calendar::start_date>()  },
+    { "end_date",    field_mapping<calendar, std::string, &calendar::end_date>()    }
+  }};
 }

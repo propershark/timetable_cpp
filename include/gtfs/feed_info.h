@@ -8,7 +8,6 @@
 namespace gtfs {
   class feed_info {
     static csv_parser<feed_info> parser;
-    static type_map_t type_map;
 
     public:
       static std::string file_name;
@@ -35,18 +34,18 @@ namespace gtfs {
           << "\tPublisher URL: " << fi.publisher_url << "\n"
           << "\tLanguage: " << fi.language << "\n"
           << "\tStart Date: " << fi.start_date << "\n"
-          << "\tEnd Date: " << fi.end_date << "\n";
+          << "\tEnd Date: " << fi.end_date << "\n"
           << "\tVersion: " << fi.version << "\n";
       };
   };
 
   std::string feed_info::file_name = "feed_info.txt";
-  type_map_t feed_info::type_map = {
-    {"feed_publisher_name", type::t_string},
-    {"feed_publisher_url",  type::t_string},
-    {"feed_lang",           type::t_string},
-    {"feed_start_date",     type::t_string},
-    {"feed_end_date",       type::t_string},
-    {"feed_version",        type::t_string}
-  };
+  csv_parser<feed_info> feed_info::parser = {{
+    { "feed_publisher_name", field_mapping<feed_info, std::string, &feed_info::publisher_name>() },
+    { "feed_publisher_url",  field_mapping<feed_info, std::string, &feed_info::publisher_url>()  },
+    { "feed_lang",           field_mapping<feed_info, std::string, &feed_info::language>()       },
+    { "feed_start_date",     field_mapping<feed_info, std::string, &feed_info::start_date>()     },
+    { "feed_end_date",       field_mapping<feed_info, std::string, &feed_info::end_date>()       },
+    { "feed_version",        field_mapping<feed_info, std::string, &feed_info::version>()        }
+  }};
 }

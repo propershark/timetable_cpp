@@ -8,7 +8,6 @@
 namespace gtfs {
   class shape {
     static csv_parser<shape> parser;
-    static type_map_t type_map;
 
     public:
       static std::string file_name;
@@ -24,7 +23,6 @@ namespace gtfs {
       float distance;
 
       shape() = default;
-      shape(std::string id, float lat, float lon, int idx, float dist) : id(id), latitude(lat), longitude(lon), index(idx), distance(dist) {};
 
 
       // Standard stream output
@@ -38,11 +36,11 @@ namespace gtfs {
   };
 
   std::string shape::file_name = "shapes.txt";
-  type_map_t shape::type_map = {
-    {"shape_id",            type::t_string},
-    {"shape_pt_lat",        type::t_float},
-    {"shape_pt_lon",        type::t_float},
-    {"shape_pt_sequence",   type::t_int},
-    {"shape_dist_traveled", type::t_float}
-  };
+  csv_parser<shape> shape::parser = {{
+    { "shape_id",            field_mapping<shape, std::string, &shape::id>()         },
+    { "shape_pt_lat",        field_mapping<shape, float,       &shape::latitude>()   },
+    { "shape_pt_lon",        field_mapping<shape, float,       &shape::longitude>()  },
+    { "shape_pt_sequence",   field_mapping<shape, int,         &shape::index>()      },
+    { "shape_dist_traveled", field_mapping<shape, float,       &shape::distance>()   }
+  }};
 }

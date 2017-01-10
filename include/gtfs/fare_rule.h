@@ -8,7 +8,6 @@
 namespace gtfs {
   class fare_rule {
     static csv_parser<fare_rule> parser;
-    static type_map_t type_map;
 
     public:
       static std::string file_name;
@@ -38,11 +37,11 @@ namespace gtfs {
   };
 
   std::string fare_rule::file_name = "fare_rules.txt";
-  type_map_t fare_rule::type_map = {
-    {"fare_id",         type::t_string},
-    {"route_id",        type::t_string},
-    {"origin_id",       type::t_string},
-    {"destination_id",  type::t_string},
-    {"contains_id",     type::t_string}
-  };
+  csv_parser<fare_rule> fare_rule::parser = {{
+    { "fare_id",         field_mapping<fare_rule, std::string, &fare_rule::fare_id>()        },
+    { "route_id",        field_mapping<fare_rule, std::string, &fare_rule::route_id>()       },
+    { "origin_id",       field_mapping<fare_rule, std::string, &fare_rule::origin_id>()      },
+    { "destination_id",  field_mapping<fare_rule, std::string, &fare_rule::destination_id>() },
+    { "contains_id",     field_mapping<fare_rule, std::string, &fare_rule::contains_id>()    }
+  }};
 }

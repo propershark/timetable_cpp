@@ -8,7 +8,6 @@
 namespace gtfs {
   class stop {
     static csv_parser<stop> parser;
-    static type_map_t type_map;
 
     public:
       static std::string file_name;
@@ -38,7 +37,6 @@ namespace gtfs {
       int wheelchair_boarding;
 
       stop() = default;
-      stop(std::string id, std::string code, std::string name, std::string desc, float lat, float lon, int type) : id(id), code(code), name(name), description(desc), latitude(lat), longitude(lon), type(type) {};
 
 
       // Standard stream output
@@ -53,18 +51,18 @@ namespace gtfs {
   };
 
   std::string stop::file_name = "stops.txt";
-  type_map_t stop::type_map = {
-    {"stop_id",             type::t_string},
-    {"stop_code",           type::t_string},
-    {"stop_name",           type::t_string},
-    {"stop_desc",           type::t_string},
-    {"stop_lat",            type::t_float},
-    {"stop_lon",            type::t_float},
-    {"zone_id",             type::t_string},
-    {"stop_url",            type::t_string},
-    {"location_type",       type::t_int},
-    {"parent_station",      type::t_string},
-    {"stop_timezone",       type::t_string},
-    {"wheelchair_boarding", type::t_int}
-  };
+  csv_parser<stop> stop::parser = {{
+    { "stop_id",             field_mapping<stop, std::string, &stop::id>()                  },
+    { "stop_code",           field_mapping<stop, std::string, &stop::code>()                },
+    { "stop_name",           field_mapping<stop, std::string, &stop::name>()                },
+    { "stop_desc",           field_mapping<stop, std::string, &stop::description>()         },
+    { "stop_lat",            field_mapping<stop, float,       &stop::latitude>()            },
+    { "stop_lon",            field_mapping<stop, float,       &stop::longitude>()           },
+    { "zone_id",             field_mapping<stop, std::string, &stop::zone_id>()             },
+    { "stop_url",            field_mapping<stop, std::string, &stop::stop_url>()            },
+    { "location_type",       field_mapping<stop, int,         &stop::type>()                },
+    { "parent_station",      field_mapping<stop, std::string, &stop::parent_id>()           },
+    { "stop_timezone",       field_mapping<stop, std::string, &stop::timezone>()            },
+    { "wheelchair_boarding", field_mapping<stop, int,         &stop::wheelchair_boarding>() }
+  }};
 }

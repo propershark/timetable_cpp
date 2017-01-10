@@ -8,7 +8,6 @@
 namespace gtfs {
   class stop_time {
     static csv_parser<stop_time> parser;
-    static type_map_t type_map;
 
     public:
       static std::string file_name;
@@ -23,7 +22,7 @@ namespace gtfs {
       // Index of this stop time in the containing trip
       int index;
       // Text displayed on the bus headsign at this stop time
-      std::string stop_headsign;
+      std::string headsign;
       // Type of pickup offered by the vehicle at this stop time
       int pickup_type;
       // Type of dropoff offered by the vehicle at this stop time
@@ -44,7 +43,7 @@ namespace gtfs {
           << "\tDeparts at: " << st.departure_time << "\n"
           << "\tStop ID: " << st.stop_id << "\n"
           << "\tIndex: " << st.index << "\n"
-          << "\tHeadsign Text: " << st.stop_headsign << "\n"
+          << "\tHeadsign Text: " << st.headsign << "\n"
           << "\tPickup/Dropoff Type: " << st.pickup_type << "/" << st.dropoff_type << "\n"
           << "\tDistance: " << st.distance << "\n"
           << "\tTimepoint: " << st.timepoint << "\n";
@@ -52,16 +51,16 @@ namespace gtfs {
   };
 
   std::string stop_time::file_name = "stop_times.txt";
-  type_map_t stop_time::type_map = {
-    {"trip_id",             type::t_string},
-    {"arrival_time",        type::t_string},
-    {"departure_time",      type::t_string},
-    {"stop_id",             type::t_string},
-    {"stop_sequence",       type::t_int},
-    {"stop_headsign",       type::t_string},
-    {"pickup_type",         type::t_int},
-    {"dropoff_type",        type::t_int},
-    {"shape_dist_traveled", type::t_float},
-    {"timepoint",           type::t_bool}
-  };
+  csv_parser<stop_time> stop_time::parser = {{
+    { "trip_id",             field_mapping<stop_time, std::string, &stop_time::trip_id>()        },
+    { "arrival_time",        field_mapping<stop_time, std::string, &stop_time::arrival_time>()   },
+    { "departure_time",      field_mapping<stop_time, std::string, &stop_time::departure_time>() },
+    { "stop_id",             field_mapping<stop_time, std::string, &stop_time::stop_id>()        },
+    { "stop_sequence",       field_mapping<stop_time, int,         &stop_time::index>()          },
+    { "stop_headsign",       field_mapping<stop_time, std::string, &stop_time::headsign>()       },
+    { "pickup_type",         field_mapping<stop_time, int,         &stop_time::pickup_type>()    },
+    { "dropoff_type",        field_mapping<stop_time, int,         &stop_time::dropoff_type>()   },
+    { "shape_dist_traveled", field_mapping<stop_time, float,       &stop_time::distance>()       },
+    { "timepoint",           field_mapping<stop_time, bool,        &stop_time::timepoint>()      }
+  }};
 }

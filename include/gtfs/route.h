@@ -8,7 +8,6 @@
 namespace gtfs {
   class route {
     static csv_parser<route> parser;
-    static type_map_t type_map;
 
     public:
       static std::string file_name;
@@ -48,15 +47,15 @@ namespace gtfs {
   };
 
   std::string route::file_name = "routes.txt";
-  type_map_t route::type_map = {
-    {"route_id", type::t_string},
-    {"agency_id", type::t_string},
-    {"route_short_name", type::t_string},
-    {"route_long_name", type::t_string},
-    {"route_desc", type::t_string},
-    {"route_type", type::t_int},
-    {"route_url",  type::t_string},
-    {"route_color", type::t_string},
-    {"route_text_color", type::t_string}
-  };
+  csv_parser<route> route::parser = {{
+    { "route_id",         field_mapping<route, std::string, &route::id>()           },
+    { "agency_id",        field_mapping<route, std::string, &route::agency_id>()    },
+    { "route_short_name", field_mapping<route, std::string, &route::short_name>()   },
+    { "route_long_name",  field_mapping<route, std::string, &route::long_name>()    },
+    { "route_desc",       field_mapping<route, std::string, &route::description>()  },
+    { "route_url",        field_mapping<route, std::string, &route::url>()          },
+    { "route_type",       field_mapping<route, int,         &route::type>()         },
+    { "route_color",      field_mapping<route, std::string, &route::color>()        },
+    { "route_text_color", field_mapping<route, std::string, &route::text_color>()   }
+  }};
 }

@@ -8,7 +8,6 @@
 namespace gtfs {
   class agency {
     static csv_parser<agency> parser;
-    static type_map_t type_map;
 
     public:
       static std::string file_name;
@@ -45,14 +44,14 @@ namespace gtfs {
   };
 
   std::string agency::file_name = "agency.txt";
-  type_map_t agency::type_map = {
-    {"agency_id",       type::t_string},
-    {"agency_name",     type::t_string},
-    {"agency_url",      type::t_string},
-    {"agency_timezone", type::t_string},
-    {"agency_lang",     type::t_string},
-    {"agency_phone",    type::t_string},
-    {"agency_fare_url", type::t_string},
-    {"agency_email",    type::t_string}
-  };
+  csv_parser<agency> agency::parser = {{
+    { "agency_id",        field_mapping<agency, std::string, &agency::id>()       },
+    { "agency_name",      field_mapping<agency, std::string, &agency::name>()     },
+    { "agency_url",       field_mapping<agency, std::string, &agency::url>()      },
+    { "agency_timezone",  field_mapping<agency, std::string, &agency::timezone>() },
+    { "agency_lang",      field_mapping<agency, std::string, &agency::language>() },
+    { "agency_phone",     field_mapping<agency, std::string, &agency::phone>()    },
+    { "agency_fare_url",  field_mapping<agency, std::string, &agency::fare_url>() },
+    { "agency_email",     field_mapping<agency, std::string, &agency::email>()    }
+  }};
 }

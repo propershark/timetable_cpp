@@ -8,7 +8,6 @@
 namespace gtfs {
   class calendar_date {
     static csv_parser<calendar_date> parser;
-    static type_map_t type_map;
 
     public:
       static std::string file_name;
@@ -32,9 +31,9 @@ namespace gtfs {
   };
 
   std::string calendar_date::file_name = "calendar_dates.txt";
-  type_map_t calendar_date::type_map = {
-    {"service_id", type::t_string},
-    {"date", type::t_string},
-    {"exception_type", type::t_int}
-  };
+  csv_parser<calendar_date> calendar_date::parser = {{
+    { "service_id",     field_mapping<calendar_date, std::string, &calendar_date::service_id>()     },
+    { "date",           field_mapping<calendar_date, std::string, &calendar_date::date>()           },
+    { "exception_type", field_mapping<calendar_date, int,         &calendar_date::exception_type>() }
+  }};
 }

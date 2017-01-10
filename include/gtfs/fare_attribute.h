@@ -8,7 +8,6 @@
 namespace gtfs {
   class fare_attribute {
     static csv_parser<fare_attribute> parser;
-    static type_map_t type_map;
 
     public:
       static std::string file_name;
@@ -41,12 +40,12 @@ namespace gtfs {
   };
 
   std::string fare_attribute::file_name = "fare_attributes.txt";
-  type_map_t fare_attribute::type_map = {
-    {"fare_id",           type::t_string},
-    {"price",             type::t_string},
-    {"currency_type",     type::t_string},
-    {"payment_method",    type::t_int},
-    {"transfers",         type::t_int},
-    {"transfer_duration", type::t_int}
-  };
+  csv_parser<fare_attribute> fare_attribute::parser = {{
+    { "fare_id",           field_mapping<fare_attribute, std::string,  &fare_attribute::fare_id>()           },
+    { "price",             field_mapping<fare_attribute, std::string,  &fare_attribute::price>()             },
+    { "currency_type",     field_mapping<fare_attribute, std::string,  &fare_attribute::currency_type>()     },
+    { "payment_method",    field_mapping<fare_attribute, int,          &fare_attribute::payment_method>()    },
+    { "transfers",         field_mapping<fare_attribute, int,          &fare_attribute::transfers>()         },
+    { "transfer_duration", field_mapping<fare_attribute, int,          &fare_attribute::transfer_duration>() },
+  }};
 }

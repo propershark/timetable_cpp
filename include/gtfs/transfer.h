@@ -8,7 +8,6 @@
 namespace gtfs {
   class transfer {
     static csv_parser<transfer> parser;
-    static type_map_t type_map;
 
     public:
       static std::string file_name;
@@ -30,15 +29,15 @@ namespace gtfs {
           << "\tFrom Stop: " << t.from_stop_id << "\n"
           << "\tTo Stop: " << t.to_stop_id << "\n"
           << "\tTransfer Type: " << t.transfer_type << "\n"
-          << "\tMinimum Transfer Time: " << t.min_transfer_time << "\n"
+          << "\tMinimum Transfer Time: " << t.min_transfer_time << "\n";
       };
   };
 
   std::string transfer::file_name = "transfers.txt";
-  type_map_t transfer::type_map = {
-    {"from_stop_id",      type::t_string},
-    {"to_stop_id",        type::t_string},
-    {"transfer_type",     type::t_int},
-    {"min_transfer_time", type::t_int}
-  };
+  csv_parser<transfer> transfer::parser = {{
+    { "from_stop_id",      field_mapping<transfer, std::string, &transfer::from_stop_id>()       },
+    { "to_stop_id",        field_mapping<transfer, std::string, &transfer::to_stop_id>()         },
+    { "transfer_type",     field_mapping<transfer, int,         &transfer::transfer_type>()      },
+    { "min_transfer_time", field_mapping<transfer, int,         &transfer::min_transfer_time>()  }
+  }};
 }

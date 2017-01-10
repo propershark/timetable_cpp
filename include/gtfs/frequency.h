@@ -8,7 +8,6 @@
 namespace gtfs {
   class frequency {
     static csv_parser<frequency> parser;
-    static type_map_t type_map;
 
     public:
       static std::string file_name;
@@ -32,17 +31,17 @@ namespace gtfs {
           << "\tTrip: " << f.trip_id << "\n"
           << "\tStart Time: " << f.start_time << "\n"
           << "\tEnd Time: " << f.end_time << "\n"
-          << "\tHeadway Time: " << f.headway_secs << "\n"
+          << "\tHeadway Time: " << f.headway << "\n"
           << "\tExact Timing: " << f.exact_times << "\n";
       };
   };
 
   std::string frequency::file_name = "frequencies.txt";
-  type_map_t frequency::type_map = {
-    {"trip_id",       type::t_string},
-    {"start_time",    type::t_string},
-    {"end_time",      type::t_string},
-    {"headway_secs",  type::t_int},
-    {"exact_times",   type::t_bool}
-  };
+  csv_parser<frequency> frequency::parser = {{
+    { "trip_id",       field_mapping<frequency, std::string, &frequency::trip_id>()     },
+    { "start_time",    field_mapping<frequency, std::string, &frequency::start_time>()  },
+    { "end_time",      field_mapping<frequency, std::string, &frequency::end_time>()    },
+    { "headway_secs",  field_mapping<frequency, int,         &frequency::headway>()     },
+    { "exact_times",   field_mapping<frequency, bool,        &frequency::exact_times>() }
+  }};
 }
