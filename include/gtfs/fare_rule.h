@@ -38,10 +38,10 @@ namespace gtfs {
 
   std::string fare_rule::file_name = "fare_rules.txt";
   csv_parser<fare_rule> fare_rule::parser = {{
-    { "fare_id",         field_mapping<fare_rule, std::string, &fare_rule::fare_id>()        },
-    { "route_id",        field_mapping<fare_rule, std::string, &fare_rule::route_id>()       },
-    { "origin_id",       field_mapping<fare_rule, std::string, &fare_rule::origin_id>()      },
-    { "destination_id",  field_mapping<fare_rule, std::string, &fare_rule::destination_id>() },
-    { "contains_id",     field_mapping<fare_rule, std::string, &fare_rule::contains_id>()    }
+    { "fare_id",         make_field_mapper(&fare_rule::fare_id)        },
+    { "route_id",        make_field_mapper(&fare_rule::route_id)       },
+    { "origin_id",       make_field_mapper(&fare_rule::origin_id)      },
+    { "destination_id",  make_field_mapper(&fare_rule::destination_id) },
+    { "contains_id",     make_field_mapper(&fare_rule::contains_id)    }
   }};
 }

@@ -32,8 +32,8 @@ namespace gtfs {
 
   std::string calendar_date::file_name = "calendar_dates.txt";
   csv_parser<calendar_date> calendar_date::parser = {{
-    { "service_id",     field_mapping<calendar_date, std::string, &calendar_date::service_id>()     },
-    { "date",           field_mapping<calendar_date, std::string, &calendar_date::date>()           },
-    { "exception_type", field_mapping<calendar_date, int,         &calendar_date::exception_type>() }
+    { "service_id",     make_field_mapper(&calendar_date::service_id)     },
+    { "date",           make_field_mapper(&calendar_date::date)           },
+    { "exception_type", make_field_mapper(&calendar_date::exception_type) }
   }};
 }

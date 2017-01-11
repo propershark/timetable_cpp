@@ -41,11 +41,11 @@ namespace gtfs {
 
   std::string feed_info::file_name = "feed_info.txt";
   csv_parser<feed_info> feed_info::parser = {{
-    { "feed_publisher_name", field_mapping<feed_info, std::string, &feed_info::publisher_name>() },
-    { "feed_publisher_url",  field_mapping<feed_info, std::string, &feed_info::publisher_url>()  },
-    { "feed_lang",           field_mapping<feed_info, std::string, &feed_info::language>()       },
-    { "feed_start_date",     field_mapping<feed_info, std::string, &feed_info::start_date>()     },
-    { "feed_end_date",       field_mapping<feed_info, std::string, &feed_info::end_date>()       },
-    { "feed_version",        field_mapping<feed_info, std::string, &feed_info::version>()        }
+    { "feed_publisher_name", make_field_mapper(&feed_info::publisher_name) },
+    { "feed_publisher_url",  make_field_mapper(&feed_info::publisher_url)  },
+    { "feed_lang",           make_field_mapper(&feed_info::language)       },
+    { "feed_start_date",     make_field_mapper(&feed_info::start_date)     },
+    { "feed_end_date",       make_field_mapper(&feed_info::end_date)       },
+    { "feed_version",        make_field_mapper(&feed_info::version)        }
   }};
 }

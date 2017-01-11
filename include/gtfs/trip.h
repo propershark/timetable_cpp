@@ -53,15 +53,15 @@ namespace gtfs {
 
   std::string trip::file_name = "trips.txt";
   csv_parser<trip> trip::parser = {{
-    { "route_id",              field_mapping<trip, std::string,  &trip::route_id>()              },
-    { "service_id",            field_mapping<trip, std::string,  &trip::service_id>()            },
-    { "trip_id",               field_mapping<trip, std::string,  &trip::id>()                    },
-    { "trip_headsign",         field_mapping<trip, std::string,  &trip::headsign>()              },
-    { "trip_short_name",       field_mapping<trip, std::string,  &trip::short_name>()            },
-    { "direction_id",          field_mapping<trip, std::string,  &trip::direction_id>()          },
-    { "block_id",              field_mapping<trip, std::string,  &trip::block_id>()              },
-    { "shape_id",              field_mapping<trip, std::string,  &trip::shape_id>()              },
-    { "wheelchair_accessible", field_mapping<trip, int,          &trip::wheelchair_accessible>() },
-    { "bikes_allowed",         field_mapping<trip, int,          &trip::bikes_allowed>()         }
+    { "route_id",              make_field_mapper(&trip::route_id)              },
+    { "service_id",            make_field_mapper(&trip::service_id)            },
+    { "trip_id",               make_field_mapper(&trip::id)                    },
+    { "trip_headsign",         make_field_mapper(&trip::headsign)              },
+    { "trip_short_name",       make_field_mapper(&trip::short_name)            },
+    { "direction_id",          make_field_mapper(&trip::direction_id)          },
+    { "block_id",              make_field_mapper(&trip::block_id)              },
+    { "shape_id",              make_field_mapper(&trip::shape_id)              },
+    { "wheelchair_accessible", make_field_mapper(&trip::wheelchair_accessible) },
+    { "bikes_allowed",         make_field_mapper(&trip::bikes_allowed)         }
   }};
 }

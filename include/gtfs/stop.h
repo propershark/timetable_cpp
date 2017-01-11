@@ -7,9 +7,9 @@
 
 namespace gtfs {
   class stop {
-    static csv_parser<stop> parser;
 
     public:
+      static csv_parser<stop> parser;
       static std::string file_name;
       // Unique identifier for the stop
       std::string id;
@@ -52,17 +52,17 @@ namespace gtfs {
 
   std::string stop::file_name = "stops.txt";
   csv_parser<stop> stop::parser = {{
-    { "stop_id",             field_mapping<stop, std::string, &stop::id>()                  },
-    { "stop_code",           field_mapping<stop, std::string, &stop::code>()                },
-    { "stop_name",           field_mapping<stop, std::string, &stop::name>()                },
-    { "stop_desc",           field_mapping<stop, std::string, &stop::description>()         },
-    { "stop_lat",            field_mapping<stop, float,       &stop::latitude>()            },
-    { "stop_lon",            field_mapping<stop, float,       &stop::longitude>()           },
-    { "zone_id",             field_mapping<stop, std::string, &stop::zone_id>()             },
-    { "stop_url",            field_mapping<stop, std::string, &stop::stop_url>()            },
-    { "location_type",       field_mapping<stop, int,         &stop::type>()                },
-    { "parent_station",      field_mapping<stop, std::string, &stop::parent_id>()           },
-    { "stop_timezone",       field_mapping<stop, std::string, &stop::timezone>()            },
-    { "wheelchair_boarding", field_mapping<stop, int,         &stop::wheelchair_boarding>() }
+    { "stop_id",             make_field_mapper(&stop::id)                  },
+    { "stop_code",           make_field_mapper(&stop::code)                },
+    { "stop_name",           make_field_mapper(&stop::name)                },
+    { "stop_desc",           make_field_mapper(&stop::description)         },
+    { "stop_lat",            make_field_mapper(&stop::latitude)            },
+    { "stop_lon",            make_field_mapper(&stop::longitude)           },
+    { "zone_id",             make_field_mapper(&stop::zone_id)             },
+    { "stop_url",            make_field_mapper(&stop::stop_url)            },
+    { "location_type",       make_field_mapper(&stop::type)                },
+    { "parent_station",      make_field_mapper(&stop::parent_id)           },
+    { "stop_timezone",       make_field_mapper(&stop::timezone)            },
+    { "wheelchair_boarding", make_field_mapper(&stop::wheelchair_boarding) }
   }};
 }

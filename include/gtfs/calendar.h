@@ -42,15 +42,15 @@ namespace gtfs {
 
   std::string calendar::file_name = "calendar.txt";
   csv_parser<calendar> calendar::parser = {{
-    { "service_id",  field_mapping<calendar, std::string, &calendar::service_id>()  },
-    { "monday",      field_mapping<calendar, bool,        &calendar::monday>()      },
-    { "tuesday",     field_mapping<calendar, bool,        &calendar::tuesday>()     },
-    { "wednesday",   field_mapping<calendar, bool,        &calendar::wednesday>()   },
-    { "thursday",    field_mapping<calendar, bool,        &calendar::thursday>()    },
-    { "friday",      field_mapping<calendar, bool,        &calendar::friday>()      },
-    { "saturday",    field_mapping<calendar, bool,        &calendar::saturday>()    },
-    { "sunday",      field_mapping<calendar, bool,        &calendar::sunday>()      },
-    { "start_date",  field_mapping<calendar, std::string, &calendar::start_date>()  },
-    { "end_date",    field_mapping<calendar, std::string, &calendar::end_date>()    }
+    { "service_id",  make_field_mapper(&calendar::service_id)  },
+    { "monday",      make_field_mapper(&calendar::monday)      },
+    { "tuesday",     make_field_mapper(&calendar::tuesday)     },
+    { "wednesday",   make_field_mapper(&calendar::wednesday)   },
+    { "thursday",    make_field_mapper(&calendar::thursday)    },
+    { "friday",      make_field_mapper(&calendar::friday)      },
+    { "saturday",    make_field_mapper(&calendar::saturday)    },
+    { "sunday",      make_field_mapper(&calendar::sunday)      },
+    { "start_date",  make_field_mapper(&calendar::start_date)  },
+    { "end_date",    make_field_mapper(&calendar::end_date)    }
   }};
 }

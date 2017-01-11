@@ -45,13 +45,13 @@ namespace gtfs {
 
   std::string agency::file_name = "agency.txt";
   csv_parser<agency> agency::parser = {{
-    { "agency_id",        field_mapping<agency, std::string, &agency::id>()       },
-    { "agency_name",      field_mapping<agency, std::string, &agency::name>()     },
-    { "agency_url",       field_mapping<agency, std::string, &agency::url>()      },
-    { "agency_timezone",  field_mapping<agency, std::string, &agency::timezone>() },
-    { "agency_lang",      field_mapping<agency, std::string, &agency::language>() },
-    { "agency_phone",     field_mapping<agency, std::string, &agency::phone>()    },
-    { "agency_fare_url",  field_mapping<agency, std::string, &agency::fare_url>() },
-    { "agency_email",     field_mapping<agency, std::string, &agency::email>()    }
+    { "agency_id",        make_field_mapper(&agency::id)       },
+    { "agency_name",      make_field_mapper(&agency::name)     },
+    { "agency_url",       make_field_mapper(&agency::url)      },
+    { "agency_timezone",  make_field_mapper(&agency::timezone) },
+    { "agency_lang",      make_field_mapper(&agency::language) },
+    { "agency_phone",     make_field_mapper(&agency::phone)    },
+    { "agency_fare_url",  make_field_mapper(&agency::fare_url) },
+    { "agency_email",     make_field_mapper(&agency::email)    }
   }};
 }

@@ -35,9 +35,9 @@ namespace gtfs {
 
   std::string transfer::file_name = "transfers.txt";
   csv_parser<transfer> transfer::parser = {{
-    { "from_stop_id",      field_mapping<transfer, std::string, &transfer::from_stop_id>()       },
-    { "to_stop_id",        field_mapping<transfer, std::string, &transfer::to_stop_id>()         },
-    { "transfer_type",     field_mapping<transfer, int,         &transfer::transfer_type>()      },
-    { "min_transfer_time", field_mapping<transfer, int,         &transfer::min_transfer_time>()  }
+    { "from_stop_id",      make_field_mapper(&transfer::from_stop_id)       },
+    { "to_stop_id",        make_field_mapper(&transfer::to_stop_id)         },
+    { "transfer_type",     make_field_mapper(&transfer::transfer_type)      },
+    { "min_transfer_time", make_field_mapper(&transfer::min_transfer_time)  }
   }};
 }

@@ -52,15 +52,15 @@ namespace gtfs {
 
   std::string stop_time::file_name = "stop_times.txt";
   csv_parser<stop_time> stop_time::parser = {{
-    { "trip_id",             field_mapping<stop_time, std::string, &stop_time::trip_id>()        },
-    { "arrival_time",        field_mapping<stop_time, std::string, &stop_time::arrival_time>()   },
-    { "departure_time",      field_mapping<stop_time, std::string, &stop_time::departure_time>() },
-    { "stop_id",             field_mapping<stop_time, std::string, &stop_time::stop_id>()        },
-    { "stop_sequence",       field_mapping<stop_time, int,         &stop_time::index>()          },
-    { "stop_headsign",       field_mapping<stop_time, std::string, &stop_time::headsign>()       },
-    { "pickup_type",         field_mapping<stop_time, int,         &stop_time::pickup_type>()    },
-    { "dropoff_type",        field_mapping<stop_time, int,         &stop_time::dropoff_type>()   },
-    { "shape_dist_traveled", field_mapping<stop_time, float,       &stop_time::distance>()       },
-    { "timepoint",           field_mapping<stop_time, bool,        &stop_time::timepoint>()      }
+    { "trip_id",             make_field_mapper(&stop_time::trip_id)        },
+    { "arrival_time",        make_field_mapper(&stop_time::arrival_time)   },
+    { "departure_time",      make_field_mapper(&stop_time::departure_time) },
+    { "stop_id",             make_field_mapper(&stop_time::stop_id)        },
+    { "stop_sequence",       make_field_mapper(&stop_time::index)          },
+    { "stop_headsign",       make_field_mapper(&stop_time::headsign)       },
+    { "pickup_type",         make_field_mapper(&stop_time::pickup_type)    },
+    { "dropoff_type",        make_field_mapper(&stop_time::dropoff_type)   },
+    { "shape_dist_traveled", make_field_mapper(&stop_time::distance)       },
+    { "timepoint",           make_field_mapper(&stop_time::timepoint)      }
   }};
 }

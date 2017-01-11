@@ -48,14 +48,14 @@ namespace gtfs {
 
   std::string route::file_name = "routes.txt";
   csv_parser<route> route::parser = {{
-    { "route_id",         field_mapping<route, std::string, &route::id>()           },
-    { "agency_id",        field_mapping<route, std::string, &route::agency_id>()    },
-    { "route_short_name", field_mapping<route, std::string, &route::short_name>()   },
-    { "route_long_name",  field_mapping<route, std::string, &route::long_name>()    },
-    { "route_desc",       field_mapping<route, std::string, &route::description>()  },
-    { "route_url",        field_mapping<route, std::string, &route::url>()          },
-    { "route_type",       field_mapping<route, int,         &route::type>()         },
-    { "route_color",      field_mapping<route, std::string, &route::color>()        },
-    { "route_text_color", field_mapping<route, std::string, &route::text_color>()   }
+    { "route_id",         make_field_mapper(&route::id)           },
+    { "agency_id",        make_field_mapper(&route::agency_id)    },
+    { "route_short_name", make_field_mapper(&route::short_name)   },
+    { "route_long_name",  make_field_mapper(&route::long_name)    },
+    { "route_desc",       make_field_mapper(&route::description)  },
+    { "route_url",        make_field_mapper(&route::url)          },
+    { "route_type",       make_field_mapper(&route::type)         },
+    { "route_color",      make_field_mapper(&route::color)        },
+    { "route_text_color", make_field_mapper(&route::text_color)   }
   }};
 }

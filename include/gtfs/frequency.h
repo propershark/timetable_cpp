@@ -38,10 +38,10 @@ namespace gtfs {
 
   std::string frequency::file_name = "frequencies.txt";
   csv_parser<frequency> frequency::parser = {{
-    { "trip_id",       field_mapping<frequency, std::string, &frequency::trip_id>()     },
-    { "start_time",    field_mapping<frequency, std::string, &frequency::start_time>()  },
-    { "end_time",      field_mapping<frequency, std::string, &frequency::end_time>()    },
-    { "headway_secs",  field_mapping<frequency, int,         &frequency::headway>()     },
-    { "exact_times",   field_mapping<frequency, bool,        &frequency::exact_times>() }
+    { "trip_id",       make_field_mapper(&frequency::trip_id)     },
+    { "start_time",    make_field_mapper(&frequency::start_time)  },
+    { "end_time",      make_field_mapper(&frequency::end_time)    },
+    { "headway_secs",  make_field_mapper(&frequency::headway)     },
+    { "exact_times",   make_field_mapper(&frequency::exact_times) }
   }};
 }

@@ -41,11 +41,11 @@ namespace gtfs {
 
   std::string fare_attribute::file_name = "fare_attributes.txt";
   csv_parser<fare_attribute> fare_attribute::parser = {{
-    { "fare_id",           field_mapping<fare_attribute, std::string,  &fare_attribute::fare_id>()           },
-    { "price",             field_mapping<fare_attribute, std::string,  &fare_attribute::price>()             },
-    { "currency_type",     field_mapping<fare_attribute, std::string,  &fare_attribute::currency_type>()     },
-    { "payment_method",    field_mapping<fare_attribute, int,          &fare_attribute::payment_method>()    },
-    { "transfers",         field_mapping<fare_attribute, int,          &fare_attribute::transfers>()         },
-    { "transfer_duration", field_mapping<fare_attribute, int,          &fare_attribute::transfer_duration>() },
+    { "fare_id",           make_field_mapper(&fare_attribute::fare_id)           },
+    { "price",             make_field_mapper(&fare_attribute::price)             },
+    { "currency_type",     make_field_mapper(&fare_attribute::currency_type)     },
+    { "payment_method",    make_field_mapper(&fare_attribute::payment_method)    },
+    { "transfers",         make_field_mapper(&fare_attribute::transfers)         },
+    { "transfer_duration", make_field_mapper(&fare_attribute::transfer_duration) },
   }};
 }

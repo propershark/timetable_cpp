@@ -37,10 +37,10 @@ namespace gtfs {
 
   std::string shape::file_name = "shapes.txt";
   csv_parser<shape> shape::parser = {{
-    { "shape_id",            field_mapping<shape, std::string, &shape::id>()         },
-    { "shape_pt_lat",        field_mapping<shape, float,       &shape::latitude>()   },
-    { "shape_pt_lon",        field_mapping<shape, float,       &shape::longitude>()  },
-    { "shape_pt_sequence",   field_mapping<shape, int,         &shape::index>()      },
-    { "shape_dist_traveled", field_mapping<shape, float,       &shape::distance>()   }
+    { "shape_id",            make_field_mapper(&shape::id)         },
+    { "shape_pt_lat",        make_field_mapper(&shape::latitude)   },
+    { "shape_pt_lon",        make_field_mapper(&shape::longitude)  },
+    { "shape_pt_sequence",   make_field_mapper(&shape::index)      },
+    { "shape_dist_traveled", make_field_mapper(&shape::distance)   }
   }};
 }
