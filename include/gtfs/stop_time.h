@@ -28,7 +28,7 @@ namespace gtfs {
       // Type of dropoff offered by the vehicle at this stop time
       int dropoff_type;
       // Distance traveled since the previous stop time of the containing trip
-      float distance;
+      double distance;
       // Indiciation of whether this stop time is a timepoint
       bool timepoint;
 

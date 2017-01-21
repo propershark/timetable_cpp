@@ -1,36 +1,76 @@
 #pragma once
 
+#include <fstream>
+#include <sstream>
+#include <iterator>
 #include <map>
 #include <vector>
 
-#include "minicsv.h"
+#include "gtfs/field_mapper.h"
 #include "gtfs/types.h"
 
 namespace gtfs {
-  template<class Class>
-  struct field_mapper {
-    bool        Class::*bool_target;
-    std::string Class::*string_target;
-    int         Class::*int_target;
-    float       Class::*float_target;
-    Type        type;
-
-    explicit field_mapper() = default;
-    explicit field_mapper(bool         Class::*member) : bool_target(member),   type(BOOL)    {};
-    explicit field_mapper(std::string  Class::*member) : string_target(member), type(STRING)  {};
-    explicit field_mapper(int          Class::*member) : int_target(member),    type(INT)     {};
-    explicit field_mapper(float        Class::*member) : float_target(member),  type(FLOAT)   {};
-
-    inline void apply(Class& inst, bool val)        const { inst.*bool_target   = val; };
-    inline void apply(Class& inst, std::string val) const { inst.*string_target = val; };
-    inline void apply(Class& inst, int val)         const { inst.*int_target    = val; };
-    inline void apply(Class& inst, float val)       const { inst.*float_target  = val; };
+  template<typename T>
+  inline T get_column(std::istream& in) {
+    std::string column;
+    std::getline(in, column, ',');
+    std::istringstream iss;
+    T val;
+    iss >> val;
+    return val;
   };
 
-  template<class Class, typename ValueType>
-  constexpr auto make_field_mapper(ValueType Class::*member) {
-    return field_mapper<Class>(member);
+  template<>
+  inline double get_column<double>(std::istream& in) {
+    std::string column;
+    std::getline(in, column, ',');
+    return std::stod(column);
+  }
+
+  template<>
+  inline std::string get_column<std::string>(std::istream& in) {
+    std::ostringstream column;
+
+    // Quote-escaped columns need special parsing
+    if(in.peek() == '"') {
+      in.get();
+      bool done = false;
+
+      while(!done) {
+        switch(in.peek()) {
+          // If the next character is a quote, and the following character is a
+          // comma or newline, the column is finished.
+          // Otherwise, if the following character is another quote, it is
+          // treated as a single quote character.
+          // Any other following character would result in an invalid CSV.
+          case '"':
+            in.get();
+            switch(in.peek()) {
+              case '\n':
+              case ',': done = true;
+              case '"': in.get();
+                        break;
+              default:  break;
+            }
+            break;
+          // For all other characters, input is continued.
+          default:
+            column << (char) in.get();
+            break;
+        }
+      }
+    } else {
+      char next = in.get();
+      // Consume until a delimiting character is found
+      while(next != ',') {
+        column << next;
+        next = in.get();
+      }
+    }
+
+    return column.str();
   };
+
 
 
   template<class T>
@@ -43,6 +83,7 @@ namespace gtfs {
 
     std::string file = T::file_name;
     type_map_t field_types;
+    std::ifstream input;
 
 
     public:
@@ -52,20 +93,21 @@ namespace gtfs {
       };
 
       object_list_t parse(std::string directory) {
-        mini::csv::ifstream is((directory + "/" + this->file).c_str());
-        is.enable_trim_quote_on_str(true, '\"');
-        auto headers = _get_column_headers(is);
+        this->input = std::ifstream(directory + "/" + this->file);
+        auto headers = _get_column_headers();
 
-        while(is.read_line()) {
+        std::string line;
+        while(std::getline(this->input, line)) {
+          std::stringstream iss(line);
           value_type inst;
           for(auto header : headers) {
             auto mapper = field_types[header];
-            bool b; std::string s; int i; float f;
             switch(mapper.type) {
-              case BOOL:    is >> b; mapper.apply(inst, b); break;
-              case STRING:  is >> s; mapper.apply(inst, s); break;
-              case INT:     is >> i; mapper.apply(inst, i); break;
-              case FLOAT:   is >> f; mapper.apply(inst, f); break;
+              case tBOOL:   mapper.apply(inst, get_column<bool>(iss));        break;
+              case tSTRING: mapper.apply(inst, get_column<std::string>(iss)); break;
+              case tDOUBLE: mapper.apply(inst, get_column<double>(iss));      break;
+              default:
+              case tINT:    mapper.apply(inst, get_column<int>(iss));         break;
             }
           }
           std::cout << inst << "\n";
@@ -76,14 +118,15 @@ namespace gtfs {
 
 
     private:
-      std::vector<std::string> _get_column_headers(mini::csv::ifstream& is) {
+      std::vector<std::string> _get_column_headers() {
         std::vector<std::string> columns;
-        is.read_line();
-        while(!is.get_rest_of_line().empty()) {
-          std::string column_name;
-          is >> column_name;
-          columns.push_back(column_name);
-        }
+        std::string header_line;
+        std::getline(this->input, header_line);
+
+        std::istringstream header_stream(header_line);
+        std::string column;
+        while(std::getline(header_stream, column, ','))
+          columns.push_back(column);
 
         return columns;
       };

@@ -14,13 +14,13 @@ namespace gtfs {
       // Unique identifier for a shape
       std::string id;
       // Latitude of this point in the shape
-      float latitude;
+      double latitude;
       // Longitude of this point in the shape
-      float longitude;
+      double longitude;
       // Index of this point in the sequence of points for the shape
       int index;
       // Distance traveled from the previous shape point to get to this point
-      float distance;
+      double distance;
 
       shape() = default;
 

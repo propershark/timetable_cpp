@@ -20,9 +20,9 @@ namespace gtfs {
       // Description of what area the stop services
       std::string description;
       // Latitude of this stop
-      float latitude;
+      double latitude;
       // Longitude of this stop
-      float longitude;
+      double longitude;
       // Identifier for the fare zone this stop is in
       std::string zone_id;
       // URL for more information about this stop

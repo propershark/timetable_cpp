@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "datetime.h"
+#include "gtfs.h"
 #include "timetable.h"
 #include "transport.h"
 
@@ -35,11 +36,12 @@ int main() {
   tt.add_visit({"Route 1", "Trip 2", "Stop002", "777"});
   tt.add_visit({"Route 1", "Trip 1", "Stop002", "888"});
 
-  auto iterator = tt.visits_after({"Route 1", "Trip 1", "888"});
-  for(auto&& pair : iterator) {
-    auto visit = pair.second;
-    std::cout << visit.route_id << "-" << visit.trip_id << "-" << visit.departure << "\n";
-  }
+  gtfs::stop::parser.parse("data/");
+  // auto iterator = tt.visits_after({"Route 1", "Trip 1", "888"});
+  // for(auto&& pair : iterator) {
+  //   auto visit = pair.second;
+  //   std::cout << visit.route_id << "-" << visit.trip_id << "-" << visit.departure << "\n";
+  // }
   // Timetable::Timetable t("data/");
 
   // t.procedure("timetable.next_visit",   next_visit);
