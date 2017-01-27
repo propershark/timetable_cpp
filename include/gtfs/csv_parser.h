@@ -1,78 +1,15 @@
 #pragma once
 
 #include <fstream>
-#include <sstream>
 #include <iterator>
 #include <map>
+#include <sstream>
 #include <vector>
 
 #include "gtfs/field_mapper.h"
 #include "gtfs/types.h"
 
 namespace gtfs {
-  template<typename T>
-  inline T get_column(std::istream& in) {
-    std::string column;
-    std::getline(in, column, ',');
-    std::istringstream iss;
-    T val;
-    iss >> val;
-    return val;
-  };
-
-  template<>
-  inline double get_column<double>(std::istream& in) {
-    std::string column;
-    std::getline(in, column, ',');
-    return std::stod(column);
-  }
-
-  template<>
-  inline std::string get_column<std::string>(std::istream& in) {
-    std::ostringstream column;
-
-    // Quote-escaped columns need special parsing
-    if(in.peek() == '"') {
-      in.get();
-      bool done = false;
-
-      while(!done) {
-        switch(in.peek()) {
-          // If the next character is a quote, and the following character is a
-          // comma or newline, the column is finished.
-          // Otherwise, if the following character is another quote, it is
-          // treated as a single quote character.
-          // Any other following character would result in an invalid CSV.
-          case '"':
-            in.get();
-            switch(in.peek()) {
-              case '\n':
-              case ',': done = true;
-              case '"': in.get();
-                        break;
-              default:  break;
-            }
-            break;
-          // For all other characters, input is continued.
-          default:
-            column << (char) in.get();
-            break;
-        }
-      }
-    } else {
-      char next = in.get();
-      // Consume until a delimiting character is found
-      while(next != ',') {
-        column << next;
-        next = in.get();
-      }
-    }
-
-    return column.str();
-  };
-
-
-
   template<class T>
   class csv_parser {
     using value_type    = T;
@@ -98,16 +35,20 @@ namespace gtfs {
 
         std::string line;
         while(std::getline(this->input, line)) {
-          std::stringstream iss(line);
           value_type inst;
-          for(auto header : headers) {
+          auto columns = _tokenize_line(line);
+
+          for(size_t index = 0; index < headers.size(); index++) {
+            auto header = headers[index];
+            auto column = columns[index];
             auto mapper = field_types[header];
+
             switch(mapper.type) {
-              case tBOOL:   mapper.apply(inst, get_column<bool>(iss));        break;
-              case tSTRING: mapper.apply(inst, get_column<std::string>(iss)); break;
-              case tDOUBLE: mapper.apply(inst, get_column<double>(iss));      break;
-              default:
-              case tINT:    mapper.apply(inst, get_column<int>(iss));         break;
+              case tBOOL:   mapper.apply(inst, column == "1");     break;
+              case tDOUBLE: mapper.apply(inst, std::stod(column)); break;
+              case tINT:    mapper.apply(inst, std::stoi(column)); break;
+              case tSTRING: mapper.apply(inst, column);            break;
+              default:      break;
             }
           }
           std::cout << inst << "\n";
@@ -129,6 +70,42 @@ namespace gtfs {
           columns.push_back(column);
 
         return columns;
+      };
+
+      // Return the given line as a series of column tokens to be parsed and
+      // applied by the field mapper for the column.
+      std::vector<std::string> _tokenize_line(std::string line) {
+        std::vector<std::string> tokens;
+        size_t current         = 0;
+        size_t token_start     = 0;
+
+        while(current < line.size()) {
+          // The loop iterates once per token. The parsing of the token is done
+          // by the control branches inside of the loop.
+          token_start = current;
+
+          // If the first character is a quote, the token is "quote-escaped",
+          // and is not finished until the quote is unescaped.
+          if(line[current] == '"') {
+            current++;
+            // Unescaping the quote is done when a quote character is followed
+            // by either a comma (normal delimiter) or a newline character.
+            while(current < line.size() &&
+                !(line[current] == '"' && (line[current+1] == ',' || line[current+1] == '\n')))
+              current++;
+            // Strip the quote characters from the ends of the token.
+            // Ex: "hello" -> hello
+            tokens.push_back(line.substr(token_start+1, current-1-token_start));
+            // Iterate past the escape quote.
+            current++;
+          } else {
+            while(current < line.size() && line[current] != ',') current++;
+            tokens.push_back(line.substr(token_start, current-token_start));
+          }
+          current++;
+        }
+
+        return tokens;
       };
   };
 }

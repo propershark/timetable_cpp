@@ -7,10 +7,10 @@
 
 namespace gtfs {
   class stop_time {
-    static csv_parser<stop_time> parser;
-
     public:
+      static csv_parser<stop_time> parser;
       static std::string file_name;
+
       // Identifier for the trip containing this stop time
       std::string trip_id;
       // Time at which the vehicle should arrive at this stop
@@ -59,7 +59,7 @@ namespace gtfs {
     { "stop_sequence",       make_field_mapper(&stop_time::index)          },
     { "stop_headsign",       make_field_mapper(&stop_time::headsign)       },
     { "pickup_type",         make_field_mapper(&stop_time::pickup_type)    },
-    { "dropoff_type",        make_field_mapper(&stop_time::dropoff_type)   },
+    { "drop_off_type",       make_field_mapper(&stop_time::dropoff_type)   },
     { "shape_dist_traveled", make_field_mapper(&stop_time::distance)       },
     { "timepoint",           make_field_mapper(&stop_time::timepoint)      }
   }};

@@ -7,9 +7,8 @@
 
 namespace gtfs {
   class route {
-    static csv_parser<route> parser;
-
     public:
+      static csv_parser<route> parser;
       static std::string file_name;
       // Unique identifier for the route
       std::string id;

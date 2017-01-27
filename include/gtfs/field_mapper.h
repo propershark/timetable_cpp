@@ -20,7 +20,7 @@ namespace gtfs {
     inline void apply(Class& inst, bool val)        const { inst.*bool_target   = val; };
     inline void apply(Class& inst, std::string val) const { inst.*string_target = val; };
     inline void apply(Class& inst, int val)         const { inst.*int_target    = val; };
-    inline void apply(Class& inst, double val)      const { inst.*double_target  = val; };
+    inline void apply(Class& inst, double val)      const { inst.*double_target = val; };
   };
 
   template<class Class, typename ValueType>
