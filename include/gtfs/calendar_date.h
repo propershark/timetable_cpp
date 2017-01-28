@@ -7,10 +7,10 @@
 
 namespace gtfs {
   class calendar_date {
-    static csv_parser<calendar_date> parser;
-
     public:
+      static csv_parser<calendar_date> parser;
       static std::string file_name;
+
       // Identifier for the service affected by this calendar date
       std::string service_id;
       // Date for which the service exception applies

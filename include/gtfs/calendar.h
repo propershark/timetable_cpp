@@ -7,10 +7,10 @@
 
 namespace gtfs {
   class calendar {
-    static csv_parser<calendar> parser;
-
     public:
+      static csv_parser<calendar> parser;
       static std::string file_name;
+
       // Identifier for the service this calendar record affects.
       std::string service_id;
       // Indication of service on the given day.

@@ -7,10 +7,10 @@
 
 namespace gtfs {
   class fare_rule {
-    static csv_parser<fare_rule> parser;
-
     public:
+      static csv_parser<fare_rule> parser;
       static std::string file_name;
+
       // Identifier for the fare this rule affect
       std::string fare_id;
       // Route this fare rule affects

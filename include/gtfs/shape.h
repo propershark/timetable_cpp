@@ -7,10 +7,10 @@
 
 namespace gtfs {
   class shape {
-    static csv_parser<shape> parser;
-
     public:
+      static csv_parser<shape> parser;
       static std::string file_name;
+
       // Unique identifier for a shape
       std::string id;
       // Latitude of this point in the shape

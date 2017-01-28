@@ -7,10 +7,10 @@
 
 namespace gtfs {
   class agency {
-    static csv_parser<agency> parser;
-
     public:
+      static csv_parser<agency> parser;
       static std::string file_name;
+
       // Unique identifier for the agency
       std::string id;
       // Humanized name of the agency

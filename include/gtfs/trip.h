@@ -7,10 +7,10 @@
 
 namespace gtfs {
   class trip {
-    static csv_parser<trip> parser;
-
     public:
+      static csv_parser<trip> parser;
       static std::string file_name;
+
       // Identifier of the route traveled by this trip
       std::string route_id;
       // Identifier of the service containing this trip

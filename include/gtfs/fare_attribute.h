@@ -7,10 +7,10 @@
 
 namespace gtfs {
   class fare_attribute {
-    static csv_parser<fare_attribute> parser;
-
     public:
+      static csv_parser<fare_attribute> parser;
       static std::string file_name;
+
       // Identifier for the fare these attributes affect
       std::string fare_id;
       // Price of the fare

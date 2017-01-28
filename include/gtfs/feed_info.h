@@ -7,10 +7,10 @@
 
 namespace gtfs {
   class feed_info {
-    static csv_parser<feed_info> parser;
-
     public:
+      static csv_parser<feed_info> parser;
       static std::string file_name;
+
       // Name of the entity publishing this feed
       std::string publisher_name;
       // URL for the publishing entity

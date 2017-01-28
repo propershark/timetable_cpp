@@ -10,6 +10,7 @@ namespace gtfs {
     public:
       static csv_parser<route> parser;
       static std::string file_name;
+
       // Unique identifier for the route
       std::string id;
       // Identifier of the Agency that owns the route

@@ -7,10 +7,10 @@
 
 namespace gtfs {
   class stop {
-    static csv_parser<stop> parser;
-
     public:
+      static csv_parser<stop> parser;
       static std::string file_name;
+
       // Unique identifier for the stop
       std::string id;
       // Code used on signs and displays to represent this stop

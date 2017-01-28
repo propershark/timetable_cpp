@@ -7,10 +7,10 @@
 
 namespace gtfs {
   class transfer {
-    static csv_parser<transfer> parser;
-
     public:
+      static csv_parser<transfer> parser;
       static std::string file_name;
+
       // Stop from which this transfer applies
       std::string from_stop_id;
       // Stop to which this transfer applies

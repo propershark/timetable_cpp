@@ -7,10 +7,10 @@
 
 namespace gtfs {
   class frequency {
-    static csv_parser<frequency> parser;
-
     public:
+      static csv_parser<frequency> parser;
       static std::string file_name;
+
       // Trip this frequency applies to
       std::string trip_id;
       // Time at which service at this frequency begins
