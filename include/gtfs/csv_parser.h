@@ -30,6 +30,7 @@ namespace gtfs {
       };
 
       object_list_t parse(std::string directory) {
+        object_list_t objects;
         this->input = std::ifstream(directory + "/" + this->file);
         auto headers = _get_column_headers();
 
@@ -51,10 +52,11 @@ namespace gtfs {
               default:      break;
             }
           }
-          std::cout << inst << "\n";
+
+          objects.push_back(inst);
         }
 
-        return object_list_t();
+        return objects;
       };
 
 
