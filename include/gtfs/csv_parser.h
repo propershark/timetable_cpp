@@ -16,11 +16,15 @@ namespace gtfs {
     using object_list_t = std::vector<value_type>;
     using mapper_t      = field_mapper<value_type>;
     using type_map_t    = std::map<std::string, mapper_t>;
+    using header_list_t = std::vector<std::string>;
 
 
     std::string file = T::file_name;
     type_map_t field_types;
+
+    std::string   archive_dir;
     std::ifstream input;
+    header_list_t headers;
 
 
     public:
@@ -29,39 +33,56 @@ namespace gtfs {
         this->field_types = type_map;
       };
 
-      object_list_t parse(std::string directory) {
-        object_list_t objects;
-        this->input = std::ifstream(directory + "/" + this->file);
-        auto headers = _get_column_headers();
+      void initialize(std::string directory) {
+        this->archive_dir = directory;
+        this->input.clear();
+        this->input.close();
+        this->input.open(directory + "/" + this->file);
+        this->headers = _parse_headers();
+      }
 
-        std::string line;
-        while(std::getline(this->input, line)) {
-          value_type inst;
-          auto columns = _tokenize_line(line);
+      object_list_t all(std::string directory) {
+        object_list_t list;
+        initialize(directory);
+        std::string row;
+        while(std::getline(this->input, row)) list.push_back(_parse_line(row));
 
-          for(size_t index = 0; index < headers.size(); index++) {
-            auto header = headers[index];
-            auto column = columns[index];
-            auto mapper = field_types[header];
+        return list;
+      };
 
-            switch(mapper.type) {
-              case tBOOL:   mapper.apply(inst, column == "1");     break;
-              case tDOUBLE: mapper.apply(inst, std::stod(column)); break;
-              case tINT:    mapper.apply(inst, std::stoi(column)); break;
-              case tSTRING: mapper.apply(inst, column);            break;
-              default:      break;
-            }
-          }
 
-          objects.push_back(inst);
-        }
+      inline bool has_next() { return this->input.peek() != EOF; }
 
-        return objects;
+      value_type next() {
+        std::string row;
+        std::getline(this->input, row);
+        return _parse_line(row);
       };
 
 
     private:
-      std::vector<std::string> _get_column_headers() {
+      value_type _parse_line(std::string line) {
+        value_type inst;
+        auto columns = _tokenize_line(line);
+
+        for(size_t index = 0; index < this->headers.size(); index++) {
+          auto header = this->headers[index];
+          auto column = columns[index];
+          auto mapper = field_types[header];
+
+          switch(mapper.type) {
+            case tBOOL:   mapper.apply(inst, column == "1");     break;
+            case tDOUBLE: mapper.apply(inst, std::stod(column)); break;
+            case tINT:    mapper.apply(inst, std::stoi(column)); break;
+            case tSTRING: mapper.apply(inst, column);            break;
+            default:      break;
+          }
+        }
+
+        return inst;
+      };
+
+      std::vector<std::string> _parse_headers() {
         std::vector<std::string> columns;
         std::string header_line;
         std::getline(this->input, header_line);

@@ -16,8 +16,8 @@ namespace Timetable {
       It end()    { return second;  };
   };
 
-  using bounds_t          = bounds_template<iterator>;
-  using reverse_bounds_t  = bounds_template<reverse_iterator>;
+  using bounds_t          = bounds_template<visit_list::const_iterator>;
+  using reverse_bounds_t  = bounds_template<visit_list::const_reverse_iterator>;
 
   reverse_bounds_t reverse(bounds_t bounds) {
     return { std::make_reverse_iterator(bounds.end()), std::make_reverse_iterator(bounds.begin()) };
