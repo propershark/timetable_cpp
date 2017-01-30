@@ -51,18 +51,24 @@ namespace Timetable {
       // Views
       ////
 
-      bounds_t visits_after(const visit_list_key key) const {
-        auto lower_bound = visits.lower_bound(key);
-        auto upper_bound = visits.upper_bound(key.station_upper_bound());
-        return { lower_bound, upper_bound };
-      };
-
       reverse_bounds_t visits_before(const visit_list_key key) const {
         auto lower_bound = visits.lower_bound(key.station_lower_bound());
         auto upper_bound = visits.upper_bound(key);
         bounds_t bounds{ lower_bound, upper_bound };
         return reverse(bounds);
       };
+
+      bounds_t visits_between(const visit_list_key key1, const visit_list_key key2) const {
+        return { visits.lower_bound(key1), visits.upper_bound(key2) };
+      };
+
+      bounds_t visits_after(const visit_list_key key) const {
+        auto lower_bound = visits.lower_bound(key);
+        auto upper_bound = visits.upper_bound(key.station_upper_bound());
+        return { lower_bound, upper_bound };
+      };
+
+
 
 
     private:
