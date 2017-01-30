@@ -21,6 +21,7 @@ namespace Timetable {
       visit_list  visits;
       std::unordered_map<std::string, trip_visit_list_t> visits_by_trip;
 
+
       Timetable(std::string directory) : archive_dir(directory), calendar(directory) {
         std::cout << "Reading trips\n";
         auto trips = gtfs::trip::parser.all(archive_dir);
@@ -30,14 +31,25 @@ namespace Timetable {
         _parse_stop_times();
         std::cout << "Interpolating departures\n";
         _interpolate_stop_time_departures();
-
         std::cout << "Done\n";
       };
 
 
-      void add_visit(gtfs::stop_time visit) {
+      inline void add_visit(gtfs::stop_time visit) {
         visits[_make_visit_list_key(visit)] = visit;
       };
+
+
+      inline bool is_active(gtfs::stop_time visit, std::string date) {
+        auto trip = trip_map[visit.trip_id];
+        return calendar.service_is_active(trip.service_id, date);
+      };
+
+
+
+      ////
+      // Views
+      ////
 
       bounds_t visits_after(const visit_list_key key) const {
         auto lower_bound = visits.lower_bound(key);
@@ -98,7 +110,7 @@ namespace Timetable {
       };
 
 
-      visit_list_key _make_visit_list_key(gtfs::stop_time st) {
+      inline visit_list_key _make_visit_list_key(gtfs::stop_time st) {
         auto trip = trip_map[st.trip_id];
         return visit_list_key(st.stop_id, trip.route_id, st.trip_id, st.departure_time);
       };
