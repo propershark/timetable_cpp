@@ -46,7 +46,7 @@ namespace gtfs {
         initialize(directory);
         std::string row;
         while(std::getline(this->input, row)) list.push_back(_parse_line(row));
-
+        finish();
         return list;
       };
 
@@ -58,6 +58,8 @@ namespace gtfs {
         std::getline(this->input, row);
         return _parse_line(row);
       };
+
+      inline void finish() { this->input.close(); }
 
 
     private:

@@ -46,7 +46,6 @@ namespace Timetable {
       };
 
 
-
       ////
       // Views
       ////
@@ -70,7 +69,6 @@ namespace Timetable {
 
 
 
-
     private:
       void _parse_stop_times() {
         auto& parser = gtfs::stop_time::parser;
@@ -79,6 +77,7 @@ namespace Timetable {
           auto stop_time = parser.next();
           visits_by_trip[stop_time.trip_id].insert({ stop_time.index, stop_time });
         }
+        parser.finish();
       };
 
       void _interpolate_stop_time_departures() {
