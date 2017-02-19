@@ -10,6 +10,7 @@ namespace Timetable {
   class Timetable {
     // Map of trip IDs to their full objects
     using trip_map_t  = std::unordered_map<std::string, gtfs::trip>;
+    using route_map_t = std::unordered_map<std::string, gtfs::route>;
     // Map of stop_times ordered by stop index
     using trip_visit_list_t = std::map<int, gtfs::stop_time>;
 
@@ -17,6 +18,7 @@ namespace Timetable {
       std::string archive_dir;
 
       trip_map_t  trip_map;
+      route_map_t route_map;
       Calendar    calendar;
       visit_list  visits;
       std::unordered_map<std::string, trip_visit_list_t> visits_by_trip;
@@ -26,6 +28,9 @@ namespace Timetable {
         std::cout << "Reading trips\n";
         auto trips = gtfs::trip::parser.all(archive_dir);
         for(auto trip : trips) trip_map[trip.id] = trip;
+        std::cout << "Reading routes\n";
+        auto routes = gtfs::route::parser.all(archive_dir);
+        for(auto route : routes) route_map[route.id] = route;
 
         std::cout << "Parsing stop times\n";
         _parse_stop_times();
