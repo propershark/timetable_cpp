@@ -131,7 +131,7 @@ namespace Timetable {
 
       inline visit_list_key _make_visit_list_key(gtfs::stop_time st) {
         auto trip = trip_map[st.trip_id];
-        return visit_list_key(st.stop_id, trip.route_id, st.trip_id, st.departure_time);
+        return visit_list_key(st.stop_id, st.departure_time, trip.route_id, st.trip_id);
       };
   };
 }
