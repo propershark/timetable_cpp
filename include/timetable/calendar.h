@@ -13,7 +13,7 @@ namespace Timetable {
       calendar_t calendar;
 
       Calendar(gtfs::source& source) {
-        for(auto cd : source.calendar_dates.all()) {
+        for(auto cd : source.calendar_date_parser.all()) {
           calendar[cd.service_id][cd.date] = (cd.exception_type == 1);
         }
       };

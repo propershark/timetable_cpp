@@ -19,7 +19,7 @@ MsgPack make_payload(std::vector<Visit> visits) {
 }
 
 MsgPack do_visits_between(std::string stop_code, DateTime start, DateTime end, int count) {
-  auto stop       = tt.stop_map[stop_code];
+  auto stop       = tt.stops[stop_code];
   auto start_time = start.time;
   auto end_time   = end.time;
 

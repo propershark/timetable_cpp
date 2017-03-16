@@ -8,40 +8,29 @@
 
 namespace Timetable {
   class Timetable {
-    // Map of trip IDs to their full objects
-    using trip_map_t  = std::unordered_map<std::string, gtfs::trip>;
-    using route_map_t = std::unordered_map<std::string, gtfs::route>;
-    using stop_map_t  = std::unordered_map<std::string, gtfs::stop>;
-    // Map of stop_times ordered by stop index
-    using trip_visit_list_t = std::map<int, gtfs::stop_time>;
-
     public:
       std::string directory;
-
       gtfs::source source;
-
-      trip_map_t  trip_map;
-      route_map_t route_map;
-      route_map_t routes_by_short_name;
-      stop_map_t  stop_map;
       Calendar    calendar;
       visit_list  visits;
-      std::unordered_map<std::string, trip_visit_list_t> visits_by_trip;
+
+      std::unordered_map<std::string, gtfs::trip>   trips;
+      std::unordered_map<std::string, gtfs::route>  routes;
+      std::unordered_map<std::string, gtfs::route>  routes_by_short_name;
+      std::unordered_map<std::string, gtfs::stop>   stops;
+      std::unordered_map<std::string, std::map<int, gtfs::stop_time>> visits_by_trip;
 
 
       Timetable(std::string directory) : directory(directory), source(directory), calendar(source) {
         std::cout << "Reading trips\n";
-        auto trips = source.trips.all();
-        for(auto trip : trips) trip_map[trip.id] = trip;
+        for(auto trip : source.trip_parser.all()) trips[trip.id] = trip;
         std::cout << "Reading routes\n";
-        auto routes = source.routes.all();
-        for(auto route : routes) {
-          route_map[route.id] = route;
+        for(auto route : source.route_parser.all()) {
+          routes[route.id] = route;
           routes_by_short_name[route.short_name] = route;
         }
         std::cout << "Reading stops\n";
-        auto stops = source.stops.all();
-        for(auto stop : stops) stop_map[stop.code] = stop;
+        for(auto stop : source.stop_parser.all()) stops[stop.code] = stop;
 
         std::cout << "Parsing stop times\n";
         _parse_stop_times();
@@ -57,7 +46,7 @@ namespace Timetable {
 
 
       inline bool is_active(gtfs::stop_time visit, std::string date) {
-        auto trip = trip_map[visit.trip_id];
+        auto trip = trips[visit.trip_id];
         return calendar.service_is_active(trip.service_id, date);
       };
 
@@ -87,12 +76,12 @@ namespace Timetable {
 
     private:
       void _parse_stop_times() {
-        source.stop_times.initialize();
-        while(source.stop_times.has_next()) {
-          auto stop_time = source.stop_times.next();
+        source.stop_time_parser.initialize();
+        while(source.stop_time_parser.has_next()) {
+          auto stop_time = source.stop_time_parser.next();
           visits_by_trip[stop_time.trip_id].insert({ stop_time.index, stop_time });
         }
-        source.stop_times.finish();
+        source.stop_time_parser.finish();
       };
 
       void _interpolate_stop_time_departures() {
@@ -132,7 +121,7 @@ namespace Timetable {
 
 
       inline visit_list_key _make_visit_list_key(gtfs::stop_time st) {
-        auto trip = trip_map[st.trip_id];
+        auto trip = trips[st.trip_id];
         return visit_list_key(st.stop_id, st.departure_time, trip.route_id, st.trip_id);
       };
   };

@@ -149,35 +149,35 @@ namespace gtfs {
       };
 
       // Parser objects for each type defined by GTFS.
-      csv_parser<agency> agency;
-      csv_parser<calendar> calendar;
-      csv_parser<calendar_date> calendar_dates;
-      csv_parser<fare_attribute> fare_attributes;
-      csv_parser<fare_rule> fare_rules;
-      csv_parser<feed_info> feed_info;
-      csv_parser<frequency> frequencies;
-      csv_parser<route> routes;
-      csv_parser<shape> shapes;
-      csv_parser<stop> stops;
-      csv_parser<stop_time> stop_times;
-      csv_parser<transfer> transfers;
-      csv_parser<trip> trips;
+      csv_parser<agency> agency_parser;
+      csv_parser<calendar> calendar_parser;
+      csv_parser<calendar_date> calendar_date_parser;
+      csv_parser<fare_attribute> fare_attribute_parser;
+      csv_parser<fare_rule> fare_rule_parser;
+      csv_parser<feed_info> feed_info_parser;
+      csv_parser<frequency> frequency_parser;
+      csv_parser<route> route_parser;
+      csv_parser<shape> shape_parser;
+      csv_parser<stop> stop_parser;
+      csv_parser<stop_time> stop_time_parser;
+      csv_parser<transfer> transfer_parser;
+      csv_parser<trip> trip_parser;
 
 
       source(std::string directory) : directory(directory) {
-        agency          = { directory + "/agency.txt",          agency_fields };
-        calendar        = { directory + "/calendar.txt",        calendar_fields };
-        calendar_dates  = { directory + "/calendar_dates.txt",  calendar_date_fields };
-        fare_attributes = { directory + "/fare_attributes.txt", fare_attribute_fields };
-        fare_rules      = { directory + "/fare_rules.txt",      fare_rule_fields };
-        feed_info       = { directory + "/feed_info.txt",       feed_info_fields };
-        frequencies     = { directory + "/frequencies.txt",     frequency_fields };
-        routes          = { directory + "/routes.txt",          route_fields };
-        shapes          = { directory + "/shapes.txt",          shape_fields };
-        stops           = { directory + "/stops.txt",           stop_fields };
-        stop_times      = { directory + "/stop_times.txt",      stop_time_fields };
-        transfers       = { directory + "/transfers.txt",       transfer_fields };
-        trips           = { directory + "/trips.txt",           trip_fields };
+        agency_parser         = { directory + "/agency.txt",          agency_fields };
+        calendar_parser       = { directory + "/calendar.txt",        calendar_fields };
+        calendar_date_parser  = { directory + "/calendar_dates.txt",  calendar_date_fields };
+        fare_attribute_parser = { directory + "/fare_attributes.txt", fare_attribute_fields };
+        fare_rule_parser      = { directory + "/fare_rules.txt",      fare_rule_fields };
+        feed_info_parser      = { directory + "/feed_info.txt",       feed_info_fields };
+        frequency_parser      = { directory + "/frequencies.txt",     frequency_fields };
+        route_parser          = { directory + "/routes.txt",          route_fields };
+        shape_parser          = { directory + "/shapes.txt",          shape_fields };
+        stop_parser           = { directory + "/stops.txt",           stop_fields };
+        stop_time_parser      = { directory + "/stop_times.txt",      stop_time_fields };
+        transfer_parser       = { directory + "/transfers.txt",       transfer_fields };
+        trip_parser           = { directory + "/trips.txt",           trip_fields };
       };
   };
 }
