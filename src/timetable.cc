@@ -1,56 +1,68 @@
 #include <iostream>
 #include <sstream>
+#include <vector>
 
 #include "datetime.h"
-#include "transport.h"
-#include "modern_sqlite.h"
 #include "gtfs.h"
+#include "timetable.h"
+#include "transport.h"
 #include "visit.h"
 
 
-void setup() {
-  GTFS::use_db("data/citybus.db");
+Timetable::Timetable tt("data/citybus");
 
-  GTFS::close_db();
+MsgPack make_payload(std::vector<Visit> visits) {
+  MsgPack payload;
+  payload.pack_array(visits.size());
+  for(auto v : visits) { payload.pack(v); }
+  return payload;
 }
 
+MsgPack do_visits_between(std::string stop_code, DateTime start, DateTime end, int count) {
+  auto stop       = tt.stop_map[stop_code];
+  auto start_time = start.time;
+  auto end_time   = end.time;
 
-int next_visits(std::string arg1, std::string arg2, DateTime timestamp, int count) {
-  std::cout << "Got call request\n"
-  << "Arg1 " << arg1 << "\n"
-  << "Arg2 " << arg2 << "\n"
-  << "Time " << timestamp << "\n"
-  << "Count " << count << "\n";
+  std::vector<Visit> results;
+  for(auto pair : tt.visits_between({stop.id, start_time, "", ""}, {stop.id, end_time, "", ""})) {
+    auto visit = pair.second;
+    if(!tt.is_active(visit, start.date)) continue;
 
-  return 1;
+    results.push_back({visit, start.date, start.date, tt});
+    if(results.size() >= count) break;
+  }
+
+  return make_payload(results);
 }
-int next_visit(std::string arg1, std::string arg2, DateTime ts) { return next_visits(arg1, arg2, ts, 1); }
 
-int last_visits(std::string arg1, std::string arg2, DateTime timestamp, int count) {
-  std::cout << "Got call request\n"
-  << "Arg1 " << arg1 << "\n"
-  << "Arg2 " << arg2 << "\n"
-  << "Time " << timestamp << "\n"
-  << "Count " << count << "\n";
+MsgPack visits_between(std::string stop, std::string start, std::string end, int count) {
+  std::cout << "Received call to `visits_between`: \n"
+            << "\tstop:   " << stop << "\n"
+            << "\tstart:  " << start << "\n"
+            << "\tend:    " << end << "\n"
+            << "\tcount:  " << count << "\n";
 
-  return 1;
+  auto response_start  = std::chrono::system_clock::now();
+  MsgPack result = do_visits_between(stop, start, end, count);
+  auto response_end    = std::chrono::system_clock::now();
+  std::chrono::duration<double, std::milli> elapsed_time = response_end - response_start;
+
+  std::cout << "Responded in " << elapsed_time.count() << "ms with:\n"
+            << result << "\n\n";
+
+  return result;
 }
-int last_visit(std::string arg1, std::string arg2, DateTime ts) { return last_visits(arg1, arg2, ts, 1); }
 
 
 int main() {
   Transport t("ws://shark-nyc1.transio.us:8080/ws");
 
-  GTFS::use_db("data/citybus.db");
-  setup();
-
-  t.procedure("timetable.next_visit",   next_visit);
-  t.procedure("timetable.next_visits",  next_visits);
-  t.procedure("timetable.last_visit",   last_visit);
-  t.procedure("timetable.last_visits",  last_visits);
+  t.procedure("timetable.visits_between",             visits_between);
+  // t.procedure("timetable.visits_between_from_route",  visits_between_from_route);
   t.start();
 
-  GTFS::close_db();
+  // visits_between("BUS389", "20170130 06:44:00", "20170130 10:44:00", 2);
+  // visits_between("BUS389", "20170130 06:44:00", "20170130 10:44:00", 10);
 
   return 0;
 }

@@ -2,13 +2,15 @@
 
 #include <ostream>
 
-#include "gtfs/decls.h"
+#include "gtfs/csv_parser.h"
 
 
-namespace GTFS {
-  class CalendarDate : public ObjectBase<CalendarDate, std::string, std::string, int> {
+namespace gtfs {
+  class calendar_date {
     public:
-      static std::string table_name;
+      static csv_parser<calendar_date> parser;
+      static std::string file_name;
+
       // Identifier for the service affected by this calendar date
       std::string service_id;
       // Date for which the service exception applies
@@ -16,18 +18,22 @@ namespace GTFS {
       // Code of the type of exception that will occur
       int exception_type;
 
-      CalendarDate() = default;
-      CalendarDate(std::string sid, std::string date, int e_type) : service_id(sid), date(date), exception_type(e_type) {};
+      calendar_date() = default;
 
 
       // Standard stream output
-      friend std::ostream& operator<<(std::ostream& os, const CalendarDate& cd) {
-        return os << "CalendarDate: \n"
+      friend std::ostream& operator<<(std::ostream& os, const calendar_date& cd) {
+        return os << "calendar_date: \n"
           << "\tService ID: " << cd.service_id << "\n"
           << "\tDate: " << cd.date << "\n"
           << "\tException Type: " << cd.exception_type << "\n";
       };
   };
 
-  std::string CalendarDate::table_name = "calendar_dates";
+  std::string calendar_date::file_name = "calendar_dates.txt";
+  csv_parser<calendar_date> calendar_date::parser = {{
+    { "service_id",     make_field_mapper(&calendar_date::service_id)     },
+    { "date",           make_field_mapper(&calendar_date::date)           },
+    { "exception_type", make_field_mapper(&calendar_date::exception_type) }
+  }};
 }

@@ -1,17 +1,16 @@
 #pragma once
 
 #include <ostream>
-#include <sstream>
 
-#include "modern_sqlite.h"
-
-#include "gtfs/decls.h"
+#include "gtfs/csv_parser.h"
 
 
-namespace GTFS {
-  class Route : public ObjectBase<Route, std::string, std::string, std::string, std::string, std::string, std::string, std::string, std::string> {
+namespace gtfs {
+  class route {
     public:
-      static std::string table_name;
+      static csv_parser<route> parser;
+      static std::string file_name;
+
       // Unique identifier for the route
       std::string id;
       // Identifier of the Agency that owns the route
@@ -22,20 +21,21 @@ namespace GTFS {
       std::string long_name;
       // Description of the route's service
       std::string description;
+      // URL for a page containing information about the route
+      std::string url;
       // Type of transportation used on the route
-      std::string type;
+      int type;
       // Background color to use when displaying the route
       std::string color;
       // Text color to use when displaying the route
       std::string text_color;
 
-      Route() = default;
-      Route(std::string id, std::string agency, std::string sn, std::string ln, std::string desc, std::string type, std::string color, std::string text) : id(id), agency_id(agency), short_name(sn), long_name(ln), description(desc), type(type), color(color), text_color(text) {};
+      route() = default;
 
 
       // Standard stream output
-      friend std::ostream& operator<<(std::ostream& os, const Route& r) {
-        return os << "Route: \n"
+      friend std::ostream& operator<<(std::ostream& os, const route& r) {
+        return os << "route: \n"
           << "\tID: " << r.id << "\n"
           << "\tAgency: " << r.agency_id << "\n"
           << "\tShort Name: " << r.short_name << "\n"
@@ -46,5 +46,16 @@ namespace GTFS {
       };
   };
 
-  std::string Route::table_name = "routes";
+  std::string route::file_name = "routes.txt";
+  csv_parser<route> route::parser = {{
+    { "route_id",         make_field_mapper(&route::id)           },
+    { "agency_id",        make_field_mapper(&route::agency_id)    },
+    { "route_short_name", make_field_mapper(&route::short_name)   },
+    { "route_long_name",  make_field_mapper(&route::long_name)    },
+    { "route_desc",       make_field_mapper(&route::description)  },
+    { "route_url",        make_field_mapper(&route::url)          },
+    { "route_type",       make_field_mapper(&route::type)         },
+    { "route_color",      make_field_mapper(&route::color)        },
+    { "route_text_color", make_field_mapper(&route::text_color)   }
+  }};
 }

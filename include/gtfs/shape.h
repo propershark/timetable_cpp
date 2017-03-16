@@ -2,31 +2,32 @@
 
 #include <ostream>
 
-#include "gtfs/decls.h"
+#include "gtfs/csv_parser.h"
 
 
-namespace GTFS {
-  class Shape : public ObjectBase<Shape, std::string, float, float, int, float> {
+namespace gtfs {
+  class shape {
     public:
-      static std::string table_name;
+      static csv_parser<shape> parser;
+      static std::string file_name;
+
       // Unique identifier for a shape
       std::string id;
       // Latitude of this point in the shape
-      float latitude;
+      double latitude;
       // Longitude of this point in the shape
-      float longitude;
+      double longitude;
       // Index of this point in the sequence of points for the shape
       int index;
       // Distance traveled from the previous shape point to get to this point
-      float distance;
+      double distance;
 
-      Shape() = default;
-      Shape(std::string id, float lat, float lon, int idx, float dist) : id(id), latitude(lat), longitude(lon), index(idx), distance(dist) {};
+      shape() = default;
 
 
       // Standard stream output
-      friend std::ostream& operator<<(std::ostream& os, const Shape& s) {
-        return os << "Shape: \n"
+      friend std::ostream& operator<<(std::ostream& os, const shape& s) {
+        return os << "shape: \n"
           << "\tID: " << s.id << "\n"
           << "\tLat/Lon: " << s.latitude << "/" << s.longitude << "\n"
           << "\tPoint Index: " << s.index << "\n"
@@ -34,5 +35,12 @@ namespace GTFS {
       };
   };
 
-  std::string Shape::table_name = "shapes";
+  std::string shape::file_name = "shapes.txt";
+  csv_parser<shape> shape::parser = {{
+    { "shape_id",            make_field_mapper(&shape::id)         },
+    { "shape_pt_lat",        make_field_mapper(&shape::latitude)   },
+    { "shape_pt_lon",        make_field_mapper(&shape::longitude)  },
+    { "shape_pt_sequence",   make_field_mapper(&shape::index)      },
+    { "shape_dist_traveled", make_field_mapper(&shape::distance)   }
+  }};
 }
