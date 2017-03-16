@@ -121,6 +121,7 @@ namespace Timetable {
               // auto percent_traveled = visit.distance / timepoint_distance;
               // visit.departure_time = last_timepoint.departure_time + percent_traveled;
               visit.departure_time = last_timepoint.departure_time;
+              visit.arrival_time = last_timepoint.arrival_time;
             }
 
             add_visit(visit);
