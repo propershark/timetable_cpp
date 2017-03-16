@@ -2,15 +2,10 @@
 
 #include <ostream>
 
-#include "gtfs/csv_parser.h"
-
 
 namespace gtfs {
   class stop_time {
     public:
-      static csv_parser<stop_time> parser;
-      static std::string file_name;
-
       // Identifier for the trip containing this stop time
       std::string trip_id;
       // Time at which the vehicle should arrive at this stop
@@ -49,18 +44,4 @@ namespace gtfs {
           << "\tTimepoint: " << st.timepoint << "\n";
       };
   };
-
-  std::string stop_time::file_name = "stop_times.txt";
-  csv_parser<stop_time> stop_time::parser = {{
-    { "trip_id",             make_field_mapper(&stop_time::trip_id)        },
-    { "arrival_time",        make_field_mapper(&stop_time::arrival_time)   },
-    { "departure_time",      make_field_mapper(&stop_time::departure_time) },
-    { "stop_id",             make_field_mapper(&stop_time::stop_id)        },
-    { "stop_sequence",       make_field_mapper(&stop_time::index)          },
-    { "stop_headsign",       make_field_mapper(&stop_time::headsign)       },
-    { "pickup_type",         make_field_mapper(&stop_time::pickup_type)    },
-    { "drop_off_type",       make_field_mapper(&stop_time::dropoff_type)   },
-    { "shape_dist_traveled", make_field_mapper(&stop_time::distance)       },
-    { "timepoint",           make_field_mapper(&stop_time::timepoint)      }
-  }};
 }

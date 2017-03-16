@@ -2,15 +2,10 @@
 
 #include <ostream>
 
-#include "gtfs/csv_parser.h"
-
 
 namespace gtfs {
   class feed_info {
     public:
-      static csv_parser<feed_info> parser;
-      static std::string file_name;
-
       // Name of the entity publishing this feed
       std::string publisher_name;
       // URL for the publishing entity
@@ -38,14 +33,4 @@ namespace gtfs {
           << "\tVersion: " << fi.version << "\n";
       };
   };
-
-  std::string feed_info::file_name = "feed_info.txt";
-  csv_parser<feed_info> feed_info::parser = {{
-    { "feed_publisher_name", make_field_mapper(&feed_info::publisher_name) },
-    { "feed_publisher_url",  make_field_mapper(&feed_info::publisher_url)  },
-    { "feed_lang",           make_field_mapper(&feed_info::language)       },
-    { "feed_start_date",     make_field_mapper(&feed_info::start_date)     },
-    { "feed_end_date",       make_field_mapper(&feed_info::end_date)       },
-    { "feed_version",        make_field_mapper(&feed_info::version)        }
-  }};
 }

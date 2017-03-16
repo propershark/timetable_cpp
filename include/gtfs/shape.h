@@ -2,15 +2,10 @@
 
 #include <ostream>
 
-#include "gtfs/csv_parser.h"
-
 
 namespace gtfs {
   class shape {
     public:
-      static csv_parser<shape> parser;
-      static std::string file_name;
-
       // Unique identifier for a shape
       std::string id;
       // Latitude of this point in the shape
@@ -34,13 +29,4 @@ namespace gtfs {
           << "\tDistance: " << s.distance << "\n";
       };
   };
-
-  std::string shape::file_name = "shapes.txt";
-  csv_parser<shape> shape::parser = {{
-    { "shape_id",            make_field_mapper(&shape::id)         },
-    { "shape_pt_lat",        make_field_mapper(&shape::latitude)   },
-    { "shape_pt_lon",        make_field_mapper(&shape::longitude)  },
-    { "shape_pt_sequence",   make_field_mapper(&shape::index)      },
-    { "shape_dist_traveled", make_field_mapper(&shape::distance)   }
-  }};
 }

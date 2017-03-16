@@ -2,15 +2,10 @@
 
 #include <ostream>
 
-#include "gtfs/csv_parser.h"
-
 
 namespace gtfs {
   class trip {
     public:
-      static csv_parser<trip> parser;
-      static std::string file_name;
-
       // Identifier of the route traveled by this trip
       std::string route_id;
       // Identifier of the service containing this trip
@@ -50,18 +45,4 @@ namespace gtfs {
           << "\tBikes Allowed: " << t.bikes_allowed << "\n";
       };
   };
-
-  std::string trip::file_name = "trips.txt";
-  csv_parser<trip> trip::parser = {{
-    { "route_id",              make_field_mapper(&trip::route_id)              },
-    { "service_id",            make_field_mapper(&trip::service_id)            },
-    { "trip_id",               make_field_mapper(&trip::id)                    },
-    { "trip_headsign",         make_field_mapper(&trip::headsign)              },
-    { "trip_short_name",       make_field_mapper(&trip::short_name)            },
-    { "direction_id",          make_field_mapper(&trip::direction_id)          },
-    { "block_id",              make_field_mapper(&trip::block_id)              },
-    { "shape_id",              make_field_mapper(&trip::shape_id)              },
-    { "wheelchair_accessible", make_field_mapper(&trip::wheelchair_accessible) },
-    { "bikes_allowed",         make_field_mapper(&trip::bikes_allowed)         }
-  }};
 }

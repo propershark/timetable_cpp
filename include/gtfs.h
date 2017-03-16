@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gtfs/csv_parser.h"
+
 #include "gtfs/agency.h"
 #include "gtfs/calendar.h"
 #include "gtfs/calendar_date.h"
@@ -14,3 +15,5 @@
 #include "gtfs/stop_time.h"
 #include "gtfs/transfer.h"
 #include "gtfs/trip.h"
+
+#include "gtfs/source.h"

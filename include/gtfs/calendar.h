@@ -2,15 +2,10 @@
 
 #include <ostream>
 
-#include "gtfs/csv_parser.h"
-
 
 namespace gtfs {
   class calendar {
     public:
-      static csv_parser<calendar> parser;
-      static std::string file_name;
-
       // Identifier for the service this calendar record affects.
       std::string service_id;
       // Indication of service on the given day.
@@ -39,18 +34,4 @@ namespace gtfs {
           << "\tEnd Date: " << c.end_date << "\n";
       };
   };
-
-  std::string calendar::file_name = "calendar.txt";
-  csv_parser<calendar> calendar::parser = {{
-    { "service_id",  make_field_mapper(&calendar::service_id)  },
-    { "monday",      make_field_mapper(&calendar::monday)      },
-    { "tuesday",     make_field_mapper(&calendar::tuesday)     },
-    { "wednesday",   make_field_mapper(&calendar::wednesday)   },
-    { "thursday",    make_field_mapper(&calendar::thursday)    },
-    { "friday",      make_field_mapper(&calendar::friday)      },
-    { "saturday",    make_field_mapper(&calendar::saturday)    },
-    { "sunday",      make_field_mapper(&calendar::sunday)      },
-    { "start_date",  make_field_mapper(&calendar::start_date)  },
-    { "end_date",    make_field_mapper(&calendar::end_date)    }
-  }};
 }

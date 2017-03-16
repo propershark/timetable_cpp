@@ -19,7 +19,7 @@ MsgPack make_payload(std::vector<Visit> visits) {
 }
 
 MsgPack do_visits_between(std::string stop_code, DateTime start, DateTime end, int count) {
-  auto stop       = tt.stop_map[stop_code];
+  auto stop       = tt.stops[stop_code];
   auto start_time = start.time;
   auto end_time   = end.time;
 
@@ -55,14 +55,14 @@ MsgPack visits_between(std::string stop, std::string start, std::string end, int
 
 
 int main() {
-  Transport t("ws://shark-nyc1.transio.us:8080/ws");
+  // Transport t("ws://shark-nyc1.transio.us:8080/ws");
 
-  t.procedure("timetable.visits_between",             visits_between);
+  // t.procedure("timetable.visits_between",             visits_between);
   // t.procedure("timetable.visits_between_from_route",  visits_between_from_route);
-  t.start();
+  // t.start();
 
-  // visits_between("BUS389", "20170130 06:44:00", "20170130 10:44:00", 2);
-  // visits_between("BUS389", "20170130 06:44:00", "20170130 10:44:00", 10);
+  visits_between("BUS389", "20170130 06:44:00", "20170130 10:44:00", 2);
+  visits_between("BUS389", "20170130 06:44:00", "20170130 10:44:00", 10);
 
   return 0;
 }

@@ -2,15 +2,10 @@
 
 #include <ostream>
 
-#include "gtfs/csv_parser.h"
-
 
 namespace gtfs {
   class route {
     public:
-      static csv_parser<route> parser;
-      static std::string file_name;
-
       // Unique identifier for the route
       std::string id;
       // Identifier of the Agency that owns the route
@@ -45,17 +40,4 @@ namespace gtfs {
           << "\tText Color: " << r.text_color << "\n";
       };
   };
-
-  std::string route::file_name = "routes.txt";
-  csv_parser<route> route::parser = {{
-    { "route_id",         make_field_mapper(&route::id)           },
-    { "agency_id",        make_field_mapper(&route::agency_id)    },
-    { "route_short_name", make_field_mapper(&route::short_name)   },
-    { "route_long_name",  make_field_mapper(&route::long_name)    },
-    { "route_desc",       make_field_mapper(&route::description)  },
-    { "route_url",        make_field_mapper(&route::url)          },
-    { "route_type",       make_field_mapper(&route::type)         },
-    { "route_color",      make_field_mapper(&route::color)        },
-    { "route_text_color", make_field_mapper(&route::text_color)   }
-  }};
 }

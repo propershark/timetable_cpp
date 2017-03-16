@@ -2,15 +2,10 @@
 
 #include <ostream>
 
-#include "gtfs/csv_parser.h"
-
 
 namespace gtfs {
   class agency {
     public:
-      static csv_parser<agency> parser;
-      static std::string file_name;
-
       // Unique identifier for the agency
       std::string id;
       // Humanized name of the agency
@@ -42,16 +37,4 @@ namespace gtfs {
           << "\tPhone: " << a.phone << "\n";
       };
   };
-
-  std::string agency::file_name = "agency.txt";
-  csv_parser<agency> agency::parser = {{
-    { "agency_id",        make_field_mapper(&agency::id)       },
-    { "agency_name",      make_field_mapper(&agency::name)     },
-    { "agency_url",       make_field_mapper(&agency::url)      },
-    { "agency_timezone",  make_field_mapper(&agency::timezone) },
-    { "agency_lang",      make_field_mapper(&agency::language) },
-    { "agency_phone",     make_field_mapper(&agency::phone)    },
-    { "agency_fare_url",  make_field_mapper(&agency::fare_url) },
-    { "agency_email",     make_field_mapper(&agency::email)    }
-  }};
 }

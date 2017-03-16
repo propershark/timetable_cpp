@@ -19,9 +19,9 @@ class Visit {
 
     Visit(gtfs::stop_time& st, std::string arrival_date, std::string departure_date, Timetable::Timetable& tt) :
         stop_time(st),
-        station(tt.stop_map[stop_time.stop_id]),
-        trip(tt.trip_map[stop_time.trip_id]),
-        route(tt.route_map[trip.route_id]) {
+        station(tt.stops[stop_time.stop_id]),
+        trip(tt.trips[stop_time.trip_id]),
+        route(tt.routes[trip.route_id]) {
       arrival   = { arrival_date,   stop_time.arrival_time    };
       departure = { departure_date, stop_time.departure_time  };
     };

@@ -19,31 +19,30 @@ namespace gtfs {
     using header_list_t = std::vector<std::string>;
 
 
-    std::string file = T::file_name;
+    std::string file_path;
     type_map_t field_types;
 
-    std::string   archive_dir;
     std::ifstream input;
     header_list_t headers;
 
 
     public:
       csv_parser() = default;
-      csv_parser(type_map_t type_map) {
+      csv_parser(std::string file, type_map_t type_map) {
+        this->file_path   = file;
         this->field_types = type_map;
       };
 
-      void initialize(std::string directory) {
-        this->archive_dir = directory;
+      void initialize() {
         this->input.clear();
         this->input.close();
-        this->input.open(directory + "/" + this->file);
+        this->input.open(this->file_path);
         this->headers = _parse_headers();
       }
 
-      object_list_t all(std::string directory) {
+      object_list_t all() {
         object_list_t list;
-        initialize(directory);
+        initialize();
         std::string row;
         while(std::getline(this->input, row)) list.push_back(_parse_line(row));
         finish();
