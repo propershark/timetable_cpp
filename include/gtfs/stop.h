@@ -2,15 +2,10 @@
 
 #include <ostream>
 
-#include "gtfs/csv_parser.h"
-
 
 namespace gtfs {
   class stop {
     public:
-      static csv_parser<stop> parser;
-      static std::string file_name;
-
       // Unique identifier for the stop
       std::string id;
       // Code used on signs and displays to represent this stop
@@ -49,20 +44,4 @@ namespace gtfs {
           << "\tType: " << s.type << "\n";
       };
   };
-
-  std::string stop::file_name = "stops.txt";
-  csv_parser<stop> stop::parser = {{
-    { "stop_id",             make_field_mapper(&stop::id)                  },
-    { "stop_code",           make_field_mapper(&stop::code)                },
-    { "stop_name",           make_field_mapper(&stop::name)                },
-    { "stop_desc",           make_field_mapper(&stop::description)         },
-    { "stop_lat",            make_field_mapper(&stop::latitude)            },
-    { "stop_lon",            make_field_mapper(&stop::longitude)           },
-    { "zone_id",             make_field_mapper(&stop::zone_id)             },
-    { "stop_url",            make_field_mapper(&stop::stop_url)            },
-    { "location_type",       make_field_mapper(&stop::type)                },
-    { "parent_station",      make_field_mapper(&stop::parent_id)           },
-    { "stop_timezone",       make_field_mapper(&stop::timezone)            },
-    { "wheelchair_boarding", make_field_mapper(&stop::wheelchair_boarding) }
-  }};
 }

@@ -2,15 +2,10 @@
 
 #include <ostream>
 
-#include "gtfs/csv_parser.h"
-
 
 namespace gtfs {
   class frequency {
     public:
-      static csv_parser<frequency> parser;
-      static std::string file_name;
-
       // Trip this frequency applies to
       std::string trip_id;
       // Time at which service at this frequency begins
@@ -35,13 +30,4 @@ namespace gtfs {
           << "\tExact Timing: " << f.exact_times << "\n";
       };
   };
-
-  std::string frequency::file_name = "frequencies.txt";
-  csv_parser<frequency> frequency::parser = {{
-    { "trip_id",       make_field_mapper(&frequency::trip_id)     },
-    { "start_time",    make_field_mapper(&frequency::start_time)  },
-    { "end_time",      make_field_mapper(&frequency::end_time)    },
-    { "headway_secs",  make_field_mapper(&frequency::headway)     },
-    { "exact_times",   make_field_mapper(&frequency::exact_times) }
-  }};
 }

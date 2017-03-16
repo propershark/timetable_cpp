@@ -16,7 +16,9 @@ namespace Timetable {
     using trip_visit_list_t = std::map<int, gtfs::stop_time>;
 
     public:
-      std::string archive_dir;
+      std::string directory;
+
+      gtfs::source source;
 
       trip_map_t  trip_map;
       route_map_t route_map;
@@ -27,18 +29,18 @@ namespace Timetable {
       std::unordered_map<std::string, trip_visit_list_t> visits_by_trip;
 
 
-      Timetable(std::string directory) : archive_dir(directory), calendar(directory) {
+      Timetable(std::string directory) : directory(directory), source(directory), calendar(source) {
         std::cout << "Reading trips\n";
-        auto trips = gtfs::trip::parser.all(archive_dir);
+        auto trips = source.trips.all();
         for(auto trip : trips) trip_map[trip.id] = trip;
         std::cout << "Reading routes\n";
-        auto routes = gtfs::route::parser.all(archive_dir);
+        auto routes = source.routes.all();
         for(auto route : routes) {
           route_map[route.id] = route;
           routes_by_short_name[route.short_name] = route;
         }
         std::cout << "Reading stops\n";
-        auto stops = gtfs::stop::parser.all(archive_dir);
+        auto stops = source.stops.all();
         for(auto stop : stops) stop_map[stop.code] = stop;
 
         std::cout << "Parsing stop times\n";
@@ -85,13 +87,12 @@ namespace Timetable {
 
     private:
       void _parse_stop_times() {
-        auto& parser = gtfs::stop_time::parser;
-        parser.initialize(archive_dir);
-        while(parser.has_next()) {
-          auto stop_time = parser.next();
+        source.stop_times.initialize();
+        while(source.stop_times.has_next()) {
+          auto stop_time = source.stop_times.next();
           visits_by_trip[stop_time.trip_id].insert({ stop_time.index, stop_time });
         }
-        parser.finish();
+        source.stop_times.finish();
       };
 
       void _interpolate_stop_time_departures() {

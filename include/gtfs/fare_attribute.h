@@ -2,15 +2,10 @@
 
 #include <ostream>
 
-#include "gtfs/csv_parser.h"
-
 
 namespace gtfs {
   class fare_attribute {
     public:
-      static csv_parser<fare_attribute> parser;
-      static std::string file_name;
-
       // Identifier for the fare these attributes affect
       std::string fare_id;
       // Price of the fare
@@ -38,14 +33,4 @@ namespace gtfs {
           << "\tTransfer Duration: " << fa.transfer_duration << "\n";
       };
   };
-
-  std::string fare_attribute::file_name = "fare_attributes.txt";
-  csv_parser<fare_attribute> fare_attribute::parser = {{
-    { "fare_id",           make_field_mapper(&fare_attribute::fare_id)           },
-    { "price",             make_field_mapper(&fare_attribute::price)             },
-    { "currency_type",     make_field_mapper(&fare_attribute::currency_type)     },
-    { "payment_method",    make_field_mapper(&fare_attribute::payment_method)    },
-    { "transfers",         make_field_mapper(&fare_attribute::transfers)         },
-    { "transfer_duration", make_field_mapper(&fare_attribute::transfer_duration) },
-  }};
 }

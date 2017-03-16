@@ -10,11 +10,10 @@ namespace Timetable {
     using calendar_t = std::unordered_map<std::string, std::unordered_map<std::string, bool>>;
 
     public:
-      std::string archive_dir;
       calendar_t calendar;
 
-      Calendar(std::string directory) : archive_dir(directory) {
-        for(auto cd : gtfs::calendar_date::parser.all(archive_dir)) {
+      Calendar(gtfs::source& source) {
+        for(auto cd : source.calendar_dates.all()) {
           calendar[cd.service_id][cd.date] = (cd.exception_type == 1);
         }
       };
