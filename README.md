@@ -12,7 +12,7 @@ This is the only compiled part of the server system. As such, it takes a bit mor
 First, you'll need to download and compile [wamped](https://github.com/alvistar/wamped) and its dependency, [mpack](https://github.com/alvistar/mpack). It's easiest to clone msgpack into the `mpack` folder in `wamped`.
 
 ```bash
-git clone https://github.com/alvistar/wamped.git
+git clone https://github.com/propershark/wamped.git
 cd wamped
 git clone http://github.com/alvistar/mpack.git
 ```
