@@ -7,14 +7,30 @@ MsgPack do_visits_between(std::string stop_code, DateTime start, DateTime end, i
   auto end_time   = end.time;
 
   std::vector<Visit> results;
-  for(auto pair : tt.visits_between({stop.id, start_time, "", ""}, {stop.id, end_time, "", ""})) {
-    auto visit = pair.second;
-    if(!tt.is_active(visit, start.date)) continue;
 
-    results.push_back({visit, start.date, start.date, tt});
-    if((int) results.size() >= count) break;
+  std::string current_date = start.date;
+  while(current_date <= end.date) {
+    std::cout << current_date << "\n";
+
+    for(auto pair : tt.visits_between({stop.id, "", "", ""}, {stop.id, "", "", ""})) {
+      auto stop_time = pair.second;
+      if(stop_time.stop_id != stop.id) goto finish;
+
+      if(current_date == start.date && stop_time.departure_time < start_time) continue;
+      if(current_date == end.date   && stop_time.departure_time > end_time)   goto finish;
+
+      if(!tt.is_active(stop_time, current_date)) continue;
+
+      results.push_back({stop_time, current_date, current_date, tt});
+      if((int) results.size() >= count) goto finish;
+    }
+
+    std::cout << "Iterating date from "  << current_date;
+    current_date = Timetable::next_date(current_date);
+    std::cout << " to "  << current_date << "\n";
   }
 
+  finish:
   return make_payload(results);
 }
 

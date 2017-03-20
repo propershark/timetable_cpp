@@ -63,7 +63,7 @@ namespace Timetable {
       };
 
       bounds_t visits_between(const visit_list_key key1, const visit_list_key key2) const {
-        return { visits.lower_bound(key1), visits.upper_bound(key2) };
+        return { visits.lower_bound(key1.station_lower_bound()), visits.upper_bound(key2.station_upper_bound()) };
       };
 
       bounds_t visits_after(const visit_list_key key) const {
