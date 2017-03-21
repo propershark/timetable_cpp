@@ -36,13 +36,13 @@ class DateTime {
       sscanf(time.c_str(), "%2hd:%2hd:%2hd", &hours, &minutes, &seconds);
     };
 
-    bool operator< (DateTime& other) const;
-    bool operator> (DateTime& other) const;
-    bool operator<=(DateTime& other) const { return !this->operator>(other); };
-    bool operator>=(DateTime& other) const { return !this->operator<(other); };
+    bool operator< (const DateTime& other) const;
+    bool operator> (const DateTime& other) const;
+    bool operator<=(const DateTime& other) const { return !this->operator>(other); };
+    bool operator>=(const DateTime& other) const { return !this->operator<(other); };
 
-    bool operator==(DateTime& other) const;
-    bool operator!=(DateTime& other) const { return !this->operator==(other); };
+    bool operator==(const DateTime& other) const;
+    bool operator!=(const DateTime& other) const { return !this->operator==(other); };
 
     // Increment/Decrement this DateTime by 1 of the given unit. With no
     // template argument, the unit will default to 1 day.
@@ -57,10 +57,15 @@ class DateTime {
 
     // Arithmetic operations for DateTimes. Multiplication and Division are
     // non-sensical operations for DateTimes, and are thus not defined.
-    DateTime& operator+=(DateTime& other);
-    DateTime& operator-=(DateTime& other);
-    DateTime  operator+ (DateTime& other) const { DateTime dt(*this); dt += other; return dt; };
-    DateTime  operator- (DateTime& other) const { DateTime dt(*this); dt -= other; return dt; };
+    DateTime& operator+=(const DateTime& other);
+    DateTime& operator-=(const DateTime& other);
+    DateTime  operator+ (const DateTime& other) const { DateTime dt(*this); dt += other; return dt; };
+    DateTime  operator- (const DateTime& other) const { DateTime dt(*this); dt -= other; return dt; };
+
+    // Return a new DateTime with the same values, but with either the date or
+    // time portion removed.
+    DateTime without_date();
+    DateTime without_time();
 
     // Ensure that all values are within their bounds, carrying over surplus
     // values to higher unit places (e.g., 32 days becomes 1 month + 1-4 days).
@@ -77,5 +82,25 @@ class DateTime {
     // Output the string returned by `to_string()` to the given stream.
     friend std::ostream& operator<<(std::ostream& os, const DateTime& dt) {
       return os << dt.to_string();
+    };
+};
+
+class Date : public DateTime {
+  public:
+    Date(std::string date) {
+      sscanf(date.c_str(), "%4hd%2hd%2hd", &years, &months, &days);
+      hours   = 0;
+      minutes = 0;
+      seconds = 0;
+    };
+};
+
+class Time : public DateTime {
+  public:
+    Time(std::string time) {
+      sscanf(time.c_str(), "%2hd:%2hd:%2hd", &hours, &minutes, &seconds);
+      years   = 0;
+      months  = 0;
+      days    = 0;
     };
 };

@@ -1,18 +1,18 @@
 #include "datetime.h"
 
-bool DateTime::operator<(DateTime& b) const {
+bool DateTime::operator<(const DateTime& b) const {
   auto a_tie = std::tie(  years,   months,   days,   hours,   minutes,   seconds);
   auto b_tie = std::tie(b.years, b.months, b.days, b.hours, b.minutes, b.seconds);
   return a_tie < b_tie;
 };
 
-bool DateTime::operator>(DateTime& b) const {
+bool DateTime::operator>(const DateTime& b) const {
   auto a_tie = std::tie(  years,   months,   days,   hours,   minutes,   seconds);
   auto b_tie = std::tie(b.years, b.months, b.days, b.hours, b.minutes, b.seconds);
   return a_tie > b_tie;
 };
 
-bool DateTime::operator==(DateTime& b) const {
+bool DateTime::operator==(const DateTime& b) const {
   auto a_tie = std::tie(  years,   months,   days,   hours,   minutes,   seconds);
   auto b_tie = std::tie(b.years, b.months, b.days, b.hours, b.minutes, b.seconds);
   return a_tie == b_tie;
@@ -48,7 +48,7 @@ template<> DateTime DateTime::operator--<DateTime::MINUTE>(int) { minutes--;  re
 template<> DateTime DateTime::operator--<DateTime::SECOND>(int) { seconds--;  resolve(); return *this; };
 
 
-DateTime& DateTime::operator+=(DateTime& other) {
+DateTime& DateTime::operator+=(const DateTime& other) {
   this->years   += other.years;
   this->months  += other.months;
   this->days    += other.days;
@@ -58,7 +58,7 @@ DateTime& DateTime::operator+=(DateTime& other) {
   return *this;
 };
 
-DateTime& DateTime::operator-=(DateTime& other) {
+DateTime& DateTime::operator-=(const DateTime& other) {
   this->years   -= other.years;
   this->months  -= other.months;
   this->days    -= other.days;
@@ -67,6 +67,25 @@ DateTime& DateTime::operator-=(DateTime& other) {
   this->seconds -= other.seconds;
   return *this;
 };
+
+
+DateTime DateTime::without_date() {
+  DateTime dt(*this);
+  dt.years  = 0;
+  dt.months = 0;
+  dt.days   = 0;
+  dt.resolve();
+  return dt;
+};
+
+DateTime DateTime::without_time() {
+  DateTime dt(*this);
+  dt.hours    = 0;
+  dt.minutes  = 0;
+  dt.seconds  = 0;
+  dt.resolve();
+  return dt;
+}
 
 
 std::string DateTime::date() const {
