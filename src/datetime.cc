@@ -21,6 +21,7 @@ bool DateTime::operator==(const DateTime& b) const {
 
 template<> DateTime& DateTime::operator++<DateTime::YEAR>()   { years++;    resolve(); return *this; };
 template<> DateTime& DateTime::operator++<DateTime::MONTH>()  { months++;   resolve(); return *this; };
+template<> DateTime& DateTime::operator++<DateTime::WEEK>()   { days += 7;  resolve(); return *this; };
 template<> DateTime& DateTime::operator++<DateTime::DAY>()    { days++;     resolve(); return *this; };
 template<> DateTime& DateTime::operator++<DateTime::HOUR>()   { hours++;    resolve(); return *this; };
 template<> DateTime& DateTime::operator++<DateTime::MINUTE>() { minutes++;  resolve(); return *this; };
@@ -28,6 +29,7 @@ template<> DateTime& DateTime::operator++<DateTime::SECOND>() { seconds++;  reso
 
 template<> DateTime& DateTime::operator--<DateTime::YEAR>()   { years--;    resolve(); return *this; };
 template<> DateTime& DateTime::operator--<DateTime::MONTH>()  { months--;   resolve(); return *this; };
+template<> DateTime& DateTime::operator--<DateTime::WEEK>()   { days -= 7;  resolve(); return *this; };
 template<> DateTime& DateTime::operator--<DateTime::DAY>()    { days--;     resolve(); return *this; };
 template<> DateTime& DateTime::operator--<DateTime::HOUR>()   { hours--;    resolve(); return *this; };
 template<> DateTime& DateTime::operator--<DateTime::MINUTE>() { minutes--;  resolve(); return *this; };
@@ -35,6 +37,7 @@ template<> DateTime& DateTime::operator--<DateTime::SECOND>() { seconds--;  reso
 
 template<> DateTime DateTime::operator++<DateTime::YEAR>(int)   { years++;    resolve(); return *this; };
 template<> DateTime DateTime::operator++<DateTime::MONTH>(int)  { months++;   resolve(); return *this; };
+template<> DateTime DateTime::operator++<DateTime::WEEK>(int)   { days += 7;  resolve(); return *this; };
 template<> DateTime DateTime::operator++<DateTime::DAY>(int)    { days++;     resolve(); return *this; };
 template<> DateTime DateTime::operator++<DateTime::HOUR>(int)   { hours++;    resolve(); return *this; };
 template<> DateTime DateTime::operator++<DateTime::MINUTE>(int) { minutes++;  resolve(); return *this; };
@@ -42,6 +45,7 @@ template<> DateTime DateTime::operator++<DateTime::SECOND>(int) { seconds++;  re
 
 template<> DateTime DateTime::operator--<DateTime::YEAR>(int)   { years--;    resolve(); return *this; };
 template<> DateTime DateTime::operator--<DateTime::MONTH>(int)  { months--;   resolve(); return *this; };
+template<> DateTime DateTime::operator--<DateTime::WEEK>(int)   { days -= 7;  resolve(); return *this; };
 template<> DateTime DateTime::operator--<DateTime::DAY>(int)    { days--;     resolve(); return *this; };
 template<> DateTime DateTime::operator--<DateTime::HOUR>(int)   { hours--;    resolve(); return *this; };
 template<> DateTime DateTime::operator--<DateTime::MINUTE>(int) { minutes--;  resolve(); return *this; };

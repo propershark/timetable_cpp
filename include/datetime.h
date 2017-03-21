@@ -10,6 +10,7 @@ class DateTime {
     enum Unit {
       YEAR,
       MONTH,
+      WEEK,
       DAY,
       HOUR,
       MINUTE,
@@ -99,8 +100,8 @@ class Time : public DateTime {
   public:
     Time(std::string time) {
       sscanf(time.c_str(), "%2hd:%2hd:%2hd", &hours, &minutes, &seconds);
-      years   = 0;
-      months  = 0;
-      days    = 0;
+      years   = 1970;
+      months  = 1;
+      days    = 1;
     };
 };
