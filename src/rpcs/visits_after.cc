@@ -3,14 +3,14 @@
 
 MsgPack do_visits_after(std::string stop_code, DateTime start, int count) {
   auto stop       = tt.stops[stop_code];
-  auto start_time = start.time;
+  auto start_time = start.time();
 
   std::vector<Visit> results;
   for(auto pair : tt.visits_after({stop.id, start_time, "", ""})) {
     auto visit = pair.second;
-    if(!tt.is_active(visit, start.date)) continue;
+    if(!tt.is_active(visit, start.date())) continue;
 
-    results.push_back({visit, start.date, start.date, tt});
+    results.push_back({visit, start.date(), start.date(), tt});
     if((int) results.size() >= count) break;
   }
 

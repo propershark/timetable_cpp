@@ -3,17 +3,17 @@
 
 MsgPack do_visits_before_from_route(std::string stop_code, DateTime end, std::string route_name, int count) {
   auto stop     = tt.stops[stop_code];
-  auto end_time = end.time;
+  auto end_time = end.time();
   auto route    = tt.routes_by_short_name[route_name];
 
   std::vector<Visit> results;
   for(auto pair : tt.visits_before({stop.id, end_time, route.id, ""})) {
     auto visit = pair.second;
     auto visit_route = tt.routes[tt.trips[visit.trip_id].route_id];
-    if(!tt.is_active(visit, end.date)) continue;
+    if(!tt.is_active(visit, end.date())) continue;
     if(visit_route.id != route.id) continue;
 
-    results.push_back({visit, end.date, end.date, tt});
+    results.push_back({visit, end.date(), end.date(), tt});
     if((int) results.size() >= count) break;
   }
 
