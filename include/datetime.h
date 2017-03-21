@@ -6,8 +6,6 @@
 
 
 class DateTime {
-  using byte = unsigned char;
-
   public:
     enum Unit {
       YEAR,
