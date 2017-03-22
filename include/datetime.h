@@ -17,6 +17,8 @@ class DateTime {
       SECOND
     };
 
+    static DateTime EPOCH;
+
 
     short years;
     short months;
