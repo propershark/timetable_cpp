@@ -1,21 +1,30 @@
 #include "datetime.h"
 
-bool DateTime::operator<(const DateTime& b) const {
-  auto a_tie = std::tie(  years,   months,   days,   hours,   minutes,   seconds);
-  auto b_tie = std::tie(b.years, b.months, b.days, b.hours, b.minutes, b.seconds);
-  return a_tie < b_tie;
+bool DateTime::operator< (const DateTime& b) const {
+  return  years   < b.years   ||
+          months  < b.months  ||
+          days    < b.days    ||
+          hours   < b.hours   ||
+          minutes < b.minutes ||
+          seconds < b.seconds;
 };
 
-bool DateTime::operator>(const DateTime& b) const {
-  auto a_tie = std::tie(  years,   months,   days,   hours,   minutes,   seconds);
-  auto b_tie = std::tie(b.years, b.months, b.days, b.hours, b.minutes, b.seconds);
-  return a_tie > b_tie;
+bool DateTime::operator> (const DateTime& b) const {
+  return  years   > b.years   ||
+          months  > b.months  ||
+          days    > b.days    ||
+          hours   > b.hours   ||
+          minutes > b.minutes ||
+          seconds > b.seconds;
 };
 
 bool DateTime::operator==(const DateTime& b) const {
-  auto a_tie = std::tie(  years,   months,   days,   hours,   minutes,   seconds);
-  auto b_tie = std::tie(b.years, b.months, b.days, b.hours, b.minutes, b.seconds);
-  return a_tie == b_tie;
+  return  years   == b.years   &&
+          months  == b.months  &&
+          days    == b.days    &&
+          hours   == b.hours   &&
+          minutes == b.minutes &&
+          seconds == b.seconds;
 };
 
 
