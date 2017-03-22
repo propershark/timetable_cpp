@@ -20,32 +20,18 @@ DateTime DateTime::from_time(std::string time) {
   return dt;
 };
 
+inline auto as_tuple(const DateTime& dt) { return std::tie(dt.years, dt.months, dt.days, dt.hours, dt.minutes, dt.seconds); };
 
 bool DateTime::operator< (const DateTime& b) const {
-  return  years   < b.years   ||
-          months  < b.months  ||
-          days    < b.days    ||
-          hours   < b.hours   ||
-          minutes < b.minutes ||
-          seconds < b.seconds;
+  return as_tuple(*this) < as_tuple(b);
 };
 
 bool DateTime::operator> (const DateTime& b) const {
-  return  years   > b.years   ||
-          months  > b.months  ||
-          days    > b.days    ||
-          hours   > b.hours   ||
-          minutes > b.minutes ||
-          seconds > b.seconds;
+  return as_tuple(*this) > as_tuple(b);
 };
 
 bool DateTime::operator==(const DateTime& b) const {
-  return  years   == b.years   &&
-          months  == b.months  &&
-          days    == b.days    &&
-          hours   == b.hours   &&
-          minutes == b.minutes &&
-          seconds == b.seconds;
+  return as_tuple(*this) == as_tuple(b);
 };
 
 
