@@ -37,11 +37,15 @@ class DateTime {
       sscanf(time.c_str(), "%2hd:%2hd:%2hd", &hours, &minutes, &seconds);
     };
 
+    // Apply default values for entities with only a date or time part.
+    static DateTime from_date(std::string date);
+    static DateTime from_time(std::string time);
+
+    // Comparison operators
     bool operator< (const DateTime& other) const;
     bool operator> (const DateTime& other) const;
     bool operator<=(const DateTime& other) const { return !this->operator>(other); };
     bool operator>=(const DateTime& other) const { return !this->operator<(other); };
-
     bool operator==(const DateTime& other) const;
     bool operator!=(const DateTime& other) const { return !this->operator==(other); };
 
@@ -83,25 +87,5 @@ class DateTime {
     // Output the string returned by `to_string()` to the given stream.
     friend std::ostream& operator<<(std::ostream& os, const DateTime& dt) {
       return os << dt.to_string();
-    };
-};
-
-class Date : public DateTime {
-  public:
-    Date(std::string date) {
-      sscanf(date.c_str(), "%4hd%2hd%2hd", &years, &months, &days);
-      hours   = 0;
-      minutes = 0;
-      seconds = 0;
-    };
-};
-
-class Time : public DateTime {
-  public:
-    Time(std::string time) {
-      sscanf(time.c_str(), "%2hd:%2hd:%2hd", &hours, &minutes, &seconds);
-      years   = 1970;
-      months  = 1;
-      days    = 1;
     };
 };
