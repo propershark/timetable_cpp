@@ -1,6 +1,7 @@
 #include "datetime.h"
 
-DateTime DateTime::EPOCH = DateTime(1970, 1, 1, 0, 0, 0);
+// The default constructor for DateTime is set to the UNIX epoch.
+DateTime DateTime::EPOCH = DateTime();
 
 DateTime DateTime::from_date(std::string date) {
   DateTime dt(date, "00:00:00");

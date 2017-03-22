@@ -29,7 +29,7 @@ class DateTime {
     short seconds;
 
 
-    DateTime() : years(0), months(0), days(0), hours(0), minutes(0), seconds(0) {};
+    DateTime() : years(1970), months(1), days(1), hours(0), minutes(0), seconds(0) {};
     DateTime(short y, short m, short d, short h, short i, short s) : years(y), months(m), days(d), hours(h), minutes(i), seconds(s) {};
     DateTime(std::string dt) {
       sscanf(dt.c_str(), "%4hd%2hd%2hd %2hd:%2hd:%2hd", &years, &months, &days, &hours, &minutes, &seconds);
