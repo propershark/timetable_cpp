@@ -9,12 +9,15 @@
 #include "timetable/calendar.h"
 
 namespace Timetable {
+  inline std::string next(std::string arg) { std::string tmp = arg; tmp.back()++; return tmp; };
+  inline std::string prev(std::string arg) { std::string tmp = arg; tmp.back()--; return tmp; };
+
   class Timetable {
     public:
-      std::string directory;
-      gtfs::source source;
-      Calendar    calendar;
-      visit_list  visits;
+      std::string   directory;
+      gtfs::source  source;
+      Calendar      calendar;
+      visit_list    visits;
 
       std::unordered_map<std::string, gtfs::trip>   trips;
       std::unordered_map<std::string, gtfs::route>  routes;
@@ -46,8 +49,7 @@ namespace Timetable {
         visits[_make_visit_list_key(visit)] = visit;
       };
 
-
-      inline bool is_active(gtfs::stop_time visit, std::string date) {
+      inline bool is_active(gtfs::stop_time visit, DateTime date) {
         auto trip = trips[visit.trip_id];
         return calendar.service_is_active(trip.service_id, date);
       };
@@ -57,20 +59,8 @@ namespace Timetable {
       // Views
       ////
 
-      reverse_bounds_t visits_before(const visit_list_key key) const {
-        auto upper_bound = visits.upper_bound(key);
-        auto lower_bound = visits.lower_bound(key.station_lower_bound());
-        return reverse(bounds_t{ lower_bound, upper_bound });
-      };
-
-      bounds_t visits_between(const visit_list_key key1, const visit_list_key key2) const {
-        return { visits.lower_bound(key1.station_lower_bound()), visits.upper_bound(key2.station_upper_bound()) };
-      };
-
-      bounds_t visits_after(const visit_list_key key) const {
-        auto lower_bound = visits.lower_bound(key);
-        auto upper_bound = visits.upper_bound(key.station_upper_bound());
-        return { lower_bound, upper_bound };
+      bounds_t visits_at_station(std::string station_id) const {
+        return { visits.lower_bound({station_id}), visits.lower_bound({next(station_id)}) };
       };
 
 
@@ -123,7 +113,7 @@ namespace Timetable {
 
       inline visit_list_key _make_visit_list_key(gtfs::stop_time st) {
         auto trip = trips[st.trip_id];
-        return visit_list_key(st.stop_id, st.departure_time, trip.route_id, st.trip_id);
+        return visit_list_key(st.stop_id, DateTime::from_time(st.departure_time), trip.route_id, st.trip_id);
       };
   };
 }

@@ -5,18 +5,12 @@ DateTime DateTime::EPOCH = DateTime();
 
 DateTime DateTime::from_date(std::string date) {
   DateTime dt(date, "00:00:00");
-  dt.hours    = 0;
-  dt.minutes  = 0;
-  dt.seconds  = 0;
   dt.resolve();
   return dt;
 };
 
 DateTime DateTime::from_time(std::string time) {
   DateTime dt("19700101", time);
-  dt.years  = 0;
-  dt.months = 0;
-  dt.days   = 0;
   dt.resolve();
   return dt;
 };

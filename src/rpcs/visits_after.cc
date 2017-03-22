@@ -6,7 +6,7 @@ MsgPack do_visits_after(std::string stop_code, DateTime start, int count) {
   auto start_time = start.time();
 
   std::vector<Visit> results;
-  for(auto pair : tt.visits_after({stop.id, start_time, "", ""})) {
+  for(auto pair : tt.visits_at_station(stop.id)) {
     auto visit = pair.second;
     if(!tt.is_active(visit, start.date())) continue;
 

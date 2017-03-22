@@ -7,7 +7,7 @@ MsgPack do_visits_after_from_route(std::string stop_code, DateTime start, std::s
   auto route      = tt.routes_by_short_name[route_name];
 
   std::vector<Visit> results;
-  for(auto pair : tt.visits_after({stop.id, start_time, "", ""})) {
+  for(auto pair : tt.visits_at_station(stop.id)) {
     auto visit = pair.second;
     auto visit_route = tt.routes[tt.trips[visit.trip_id].route_id];
     if(!tt.is_active(visit, start.date())) continue;
