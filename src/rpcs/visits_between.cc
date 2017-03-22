@@ -12,7 +12,7 @@ MsgPack do_visits_between(std::string stop_code, DateTime start, DateTime end, i
   while(current_date <= end.date()) {
     std::cout << current_date << "\n";
 
-    for(auto pair : tt.visits_between({stop.id, "", "", ""}, {stop.id, "", "", ""})) {
+    for(auto pair : tt.visits_between({stop.id, {}, "", ""}, {stop.id, {}, "", ""})) {
       auto stop_time = pair.second;
       if(stop_time.stop_id != stop.id) goto finish;
 

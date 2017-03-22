@@ -4,6 +4,7 @@
 #include <map>
 #include <unordered_map>
 
+#include "datetime.h"
 #include "gtfs.h"
 #include "timetable/calendar.h"
 
