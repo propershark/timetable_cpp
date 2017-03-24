@@ -5,6 +5,7 @@
 #include "timetable/visit_list.h"
 #include "timetable/bounds.h"
 #include "timetable/calendar.h"
+#include "timetable/index.h"
 #include "timetable/timetable.h"
 #include "visit.h"
 
@@ -12,7 +13,11 @@
 extern Timetable::Timetable tt;
 
 
+////
+// Utilities
+////
 MsgPack make_payload(std::vector<Visit> visits);
+
 
 ////
 // RPC definitions
