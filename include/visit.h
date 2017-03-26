@@ -17,13 +17,13 @@ class Visit {
     gtfs::trip&       trip;
     gtfs::route&      route;
 
-    Visit(gtfs::stop_time& st, std::string arrival_date, std::string departure_date, Timetable::Timetable& tt) :
+    Visit(gtfs::stop_time& st, DateTime arrival_dt, DateTime departure_dt, Timetable::Timetable& tt) :
         stop_time(st),
         station(tt.stops[stop_time.stop_id]),
         trip(tt.trips[stop_time.trip_id]),
         route(tt.routes[trip.route_id]) {
-      arrival   = { arrival_date,   stop_time.arrival_time    };
-      departure = { departure_date, stop_time.departure_time  };
+      arrival   = arrival_dt;
+      departure = departure_dt;
     };
 
     // The headsign displayed on the vehicle making this visit. This can be set

@@ -2,19 +2,10 @@
 
 
 MsgPack do_visits_before(std::string stop_code, DateTime end, int count) {
-  auto stop     = tt.stops[stop_code];
-  auto end_time = end.time;
-
-  std::vector<Visit> results;
-  for(auto pair : tt.visits_before({stop.id, end_time, "", ""})) {
-    auto visit = pair.second;
-    if(!tt.is_active(visit, end.date)) continue;
-
-    results.push_back({visit, end.date, end.date, tt});
-    if((int) results.size() >= count) break;
-  }
-
-  return make_payload(results);
+  (void) stop_code;
+  (void) end;
+  (void) count;
+  return { };
 }
 
 
