@@ -1,77 +1,22 @@
 #include "timetable.h"
 
 
-namespace iteration_predicate {
-  // An iteration predicate is any function that takes in the current date, a
-  // visit_list_key, and a gtfs::stop_time and returns whether the current
-  // iteration should continue.
-  using type = std::function<bool(DateTime, Timetable::visit_list_key, gtfs::stop_time)>;
-
-  class visits_before {
-    DateTime end_dt;
-
-    public:
-      visits_before(DateTime end) : end_dt(end) {};
-
-      bool operator()(DateTime date, Timetable::visit_list_key _key, gtfs::stop_time st) {
-        (void) _key;
-        auto visit_dt = date + DateTime::from_time(st.departure_time).without_date();
-        return visit_dt <= end_dt;
-      };
-  };
-
-  template<typename ...PREDICATES>
-  class multi_predicate {
-    std::vector<iteration_predicate::type> predicates;
-
-    public:
-      multi_predicate(PREDICATES&&... preds) : predicates(std::forward<PREDICATES>(preds)...) {};
-
-      // Returns true iff all predicate conditions are met. If a predicate
-      // fails, the function will return immediately, without evaluating the
-      // remaining predicates.
-      bool operator()(DateTime date, Timetable::visit_list_key key, gtfs::stop_time st) {
-        for(auto pred : predicates) {
-          if(!pred(date, key, st)) return false;
-        }
-
-        return true;
-      };
-  };
-}
-
-
-// An iterator_block is any function that takes a datetime, visit_list_key, and
-// stop_time, performs some arbitrary operation, and returns whether iteration
-// should continue.
-using iterator_block = std::function<bool(DateTime, Timetable::visit_list_key, gtfs::stop_time)>;
-
-
-void iterate_visits_at_station(std::string station_id, iteration_predicate::type predicate, iterator_block block) {
-  DateTime current_date;
-  for(auto pair : tt.visits_at_station(station_id)) {
-    if( !(predicate(current_date, pair.first, pair.second) &&
-          block(current_date, pair.first, pair.second))
-      )
-      break;
-  }
-};
-
-
 MsgPack do_visits_between(std::string stop_code, DateTime start, DateTime end, int count) {
-  auto stop           = tt.stops[stop_code];
-  auto visits_bounds  = tt.visits_at_station(stop.id);
+  auto& index       = tt.st_indices["station.departure"];
+  auto stop         = tt.stops[stop_code];
+  auto lower_bound  = index.lower_bound(stop.id);
 
   std::vector<Visit> results;
   DateTime current_date = start.without_time();
   while(current_date <= end) {
-    for(auto pair : visits_bounds) {
-      auto stop_time = pair.second;
-      if(stop_time.stop_id != stop.id) goto finish;
+    for(auto it = lower_bound; ; ++it) {
+      auto stop_time = *it->second;
+      if(stop_time.stop_id != stop.id) goto next_date;
 
-      auto departure_dt = current_date + DateTime::from_time(stop_time.departure_time).without_date();
-      if(departure_dt < start) continue;
-      if(departure_dt > end)   goto finish;
+      auto departure_dt = DateTime(current_date.date(), stop_time.departure_time);
+      departure_dt.resolve();
+      if(departure_dt < start)  continue;
+      if(departure_dt > end)    goto finish;
 
       if(!tt.is_active(stop_time, current_date)) continue;
 
@@ -79,6 +24,7 @@ MsgPack do_visits_between(std::string stop_code, DateTime start, DateTime end, i
       if((int) results.size() >= count) goto finish;
     }
 
+    next_date:
     current_date++;
   }
 

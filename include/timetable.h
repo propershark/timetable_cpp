@@ -17,6 +17,7 @@ extern Timetable::Timetable tt;
 // Utilities
 ////
 MsgPack make_payload(std::vector<Visit> visits);
+void    create_indices();
 
 
 ////

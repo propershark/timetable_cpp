@@ -7,6 +7,7 @@
 #include "datetime.h"
 #include "gtfs.h"
 #include "timetable/calendar.h"
+#include "timetable/index.h"
 
 namespace Timetable {
   inline std::string next(std::string arg) { std::string tmp = arg; tmp.back()++; return tmp; };
@@ -17,7 +18,6 @@ namespace Timetable {
       std::string   directory;
       gtfs::source  source;
       Calendar      calendar;
-      visit_list    visits;
 
       std::unordered_map<std::string, gtfs::trip>   trips;
       std::unordered_map<std::string, gtfs::route>  routes;
@@ -25,8 +25,13 @@ namespace Timetable {
       std::unordered_map<std::string, gtfs::stop>   stops;
       std::unordered_map<std::string, std::map<int, gtfs::stop_time>> visits_by_trip;
 
+      std::vector<gtfs::stop_time>                  stop_times;
+      std::map<std::string, index>                  st_indices;
 
-      Timetable(std::string directory) : directory(directory), source(directory), calendar(source) {
+
+      Timetable(std::string directory) : directory(directory), source(directory), calendar(source) {};
+
+      void initialize() {
         std::cout << "Reading trips\n";
         for(auto trip : source.trip_parser.all()) trips[trip.id] = trip;
         std::cout << "Reading routes\n";
@@ -42,27 +47,29 @@ namespace Timetable {
         std::cout << "Interpolating departures\n";
         _interpolate_stop_time_departures();
         std::cout << "Done\n";
+
+        std::cout << "Building indices\n";
+        _build_indices();
       };
 
 
-      inline void add_visit(gtfs::stop_time visit) {
-        visits[_make_visit_list_key(visit)] = visit;
+      inline void add_visit(gtfs::stop_time st) {
+        stop_times.push_back(st);
       };
 
-      inline bool is_active(gtfs::stop_time visit, DateTime date) {
-        auto trip = trips[visit.trip_id];
+      inline bool is_active(gtfs::stop_time st, DateTime date) {
+        auto trip = trips[st.trip_id];
         return calendar.service_is_active(trip.service_id, date);
       };
 
 
       ////
-      // Views
+      // Indexing
       ////
 
-      bounds_t visits_at_station(std::string station_id) const {
-        return { visits.lower_bound({station_id}), visits.lower_bound({next(station_id)}) };
-      };
-
+      void add_index(std::string index_name, index::indexer idx) {
+        st_indices.try_emplace(index_name, idx);
+      }
 
 
     private:
@@ -106,6 +113,15 @@ namespace Timetable {
             }
 
             add_visit(visit);
+          }
+        }
+      };
+
+      void _build_indices() {
+        for(unsigned long st_index = 0; st_index < stop_times.size(); st_index++) {
+          for(auto& pair : st_indices) {
+            auto& idx = pair.second;
+            idx.add_entry(st_index, stop_times[st_index]);
           }
         }
       };
