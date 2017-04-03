@@ -2,11 +2,36 @@
 
 
 MsgPack do_visits_before_from_route(std::string stop_code, DateTime end, std::string route_name, int count) {
-  (void) stop_code;
-  (void) end;
-  (void) route_name;
-  (void) count;
-  return { };
+  std::vector<Visit> results;
+  auto &index = tt.st_indices["route.station.departure"];
+  auto stop   = tt.stops[stop_code];
+  auto route  = std::find_if(tt.routes.begin(), tt.routes.end(), [route_name](auto pair) {
+    if(pair.second.short_name == route_name) return true;
+    return false;
+  })->second;
+
+  auto upper_bound    = index.upper_bound(Timetable::next(route.id + stop.id));
+  auto initial_bound  = index.upper_bound(route.id + stop.id + end.time());
+
+  for(auto today = end.without_time(); ; today--) {
+    auto bound = today.date() == end.date() ? initial_bound : upper_bound--;
+
+    for(auto it = bound; ; --it) {
+      auto stop_time = *it->second;
+      if(stop_time.stop_id != stop.id) break;
+      if(!tt.is_active(stop_time, today)) continue;
+
+      auto departure_dt = DateTime(today.date(), stop_time.departure_time);
+      departure_dt.resolve();
+
+      results.push_back({stop_time, departure_dt, departure_dt, tt});
+
+      if((int) results.size() >= count) goto finish;
+    }
+  }
+
+  finish:
+  return make_payload(results);
 }
 
 

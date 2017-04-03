@@ -2,12 +2,38 @@
 
 
 MsgPack do_visits_between_from_route(std::string stop_code, DateTime start, DateTime end, std::string route_name, int count) {
-  (void) stop_code;
-  (void) start;
-  (void) end;
-  (void) route_name;
-  (void) count;
-  return { };
+  std::vector<Visit> results;
+  auto &index = tt.st_indices["route.station.departure"];
+  auto stop   = tt.stops[stop_code];
+  auto route  = std::find_if(tt.routes.begin(), tt.routes.end(), [route_name](auto pair) {
+    if(pair.second.short_name == route_name) return true;
+    return false;
+  })->second;
+
+  auto lower_bound    = index.lower_bound(route.id + stop.id);
+  auto initial_bound  = index.lower_bound(route.id + stop.id + start.time());
+
+  for(auto today = start.without_time(); today <= end; today++) {
+    auto bound = today.date() == start.date() ? initial_bound : lower_bound;
+
+    for(auto it = bound; ; ++it) {
+      auto stop_time = *it->second;
+      if(stop_time.stop_id != stop.id) break;
+      if(!tt.is_active(stop_time, today)) continue;
+
+      auto departure_dt = DateTime(today.date(), stop_time.departure_time);
+      departure_dt.resolve();
+      if(departure_dt < start)  continue;
+      if(departure_dt > end)    goto finish;
+
+      results.push_back({stop_time, departure_dt, departure_dt, tt});
+
+      if((int) results.size() >= count) goto finish;
+    }
+  }
+
+  finish:
+  return make_payload(results);
 }
 
 

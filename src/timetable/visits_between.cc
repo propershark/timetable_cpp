@@ -3,11 +3,12 @@
 
 MsgPack do_visits_between(std::string stop_code, DateTime start, DateTime end, int count) {
   std::vector<Visit> results;
-  auto &index         = tt.st_indices["station.departure"];
-  auto stop           = tt.stops[stop_code];
+  auto &index = tt.st_indices["station.departure"];
+  auto stop   = tt.stops[stop_code];
 
   auto lower_bound    = index.lower_bound(stop.id);
   auto initial_bound  = index.lower_bound(stop.id + start.time());
+
   for(auto today = start.without_time(); today <= end; today++) {
     auto bound = today.date() == start.date() ? initial_bound : lower_bound;
 
