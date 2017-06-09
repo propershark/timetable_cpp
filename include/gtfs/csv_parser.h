@@ -5,6 +5,7 @@
 #include <map>
 #include <sstream>
 #include <vector>
+#include <experimental/optional>
 
 #include "gtfs/field_mapper.h"
 #include "gtfs/types.h"
@@ -17,6 +18,9 @@ namespace gtfs {
     using mapper_t      = field_mapper<value_type>;
     using type_map_t    = std::map<std::string, mapper_t>;
     using header_list_t = std::vector<std::string>;
+    
+    template<class U>
+    using optional      = std::experimental::optional<U>;
 
 
     std::string file_path;
@@ -72,11 +76,23 @@ namespace gtfs {
           auto mapper = field_types[header];
 
           switch(mapper.type) {
-            case tBOOL:   mapper.apply(inst, column == "1");     break;
-            case tDOUBLE: mapper.apply(inst, std::stod(column)); break;
-            case tINT:    mapper.apply(inst, std::stoi(column)); break;
-            case tSTRING: mapper.apply(inst, column);            break;
-            default:      break;
+            case tBOOL:
+              try { mapper.apply(inst, optional<bool>(std::stoi(column) == 1)); } 
+              catch (std::invalid_argument e) { mapper.apply(inst, optional<bool>()); }
+              break;
+            case tDOUBLE:
+              try { mapper.apply(inst, optional<double>(std::stod(column))); }
+              catch (std::invalid_argument e) { mapper.apply(inst, optional<double>()); }
+              break;
+            case tINT:
+              try { mapper.apply(inst, optional<int>(std::stoi(column))); }
+              catch (std::invalid_argument e) { mapper.apply(inst, optional<int>()); }
+              break;
+            case tSTRING:
+              if (column.empty()) mapper.apply(inst, optional<std::string>());
+              else                mapper.apply(inst, optional<std::string>(column));
+              break;
+            default: break;
           }
         }
 
