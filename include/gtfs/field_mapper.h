@@ -26,14 +26,10 @@ namespace gtfs {
     explicit field_mapper(int         Class::*member) : int_target(member),     type(tINT)    {};
     explicit field_mapper(double      Class::*member) : double_target(member),  type(tDOUBLE) {};
 
-    explicit field_mapper(bool Class::*member, bool default_val) :
-      bool_target(member), type(tBOOL), default_bool(default_val) {};
-    explicit field_mapper(std::string Class::*member, std::string default_val) :
-      string_target(member), type(tSTRING), default_string(default_val) {};
-    explicit field_mapper(int Class::*member, int default_val) :
-      int_target(member), type(tINT), default_int(default_val) {};
-    explicit field_mapper(double Class::*member, double default_val) :
-      double_target(member), type(tDOUBLE), default_double(default_val) {};
+    explicit field_mapper(bool        Class::*member, bool        default_val) : bool_target(member),   type(tBOOL),   default_bool(default_val)   {};
+    explicit field_mapper(std::string Class::*member, std::string default_val) : string_target(member), type(tSTRING), default_string(default_val) {};
+    explicit field_mapper(int         Class::*member, int         default_val) : int_target(member),    type(tINT),    default_int(default_val)    {};
+    explicit field_mapper(double      Class::*member, double      default_val) : double_target(member), type(tDOUBLE), default_double(default_val) {};
 
     inline void apply(Class& inst, optional<int> val) const    { inst.*int_target = val.value_or(*default_int); }
     inline void apply(Class& inst, optional<bool> val) const   { inst.*bool_target = val.value_or(*default_bool); }
