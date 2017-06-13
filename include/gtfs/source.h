@@ -73,11 +73,11 @@ namespace gtfs {
       };
 
       field_map_t<frequency> frequency_fields = {
-        { "trip_id",       make_field_mapper(&frequency::trip_id)     },
-        { "start_time",    make_field_mapper(&frequency::start_time)  },
-        { "end_time",      make_field_mapper(&frequency::end_time)    },
-        { "headway_secs",  make_field_mapper(&frequency::headway)     },
-        { "exact_times",   make_field_mapper(&frequency::exact_times) }
+        { "trip_id",       make_field_mapper(&frequency::trip_id)            },
+        { "start_time",    make_field_mapper(&frequency::start_time)         },
+        { "end_time",      make_field_mapper(&frequency::end_time)           },
+        { "headway_secs",  make_field_mapper(&frequency::headway)            },
+        { "exact_times",   make_field_mapper(&frequency::exact_times, false) }
       };
 
       field_map_t<route> route_fields = {
@@ -101,31 +101,31 @@ namespace gtfs {
       };
 
       field_map_t<stop> stop_fields = {
-        { "stop_id",             make_field_mapper(&stop::id)                  },
-        { "stop_code",           make_field_mapper(&stop::code)                },
-        { "stop_name",           make_field_mapper(&stop::name)                },
-        { "stop_desc",           make_field_mapper(&stop::description)         },
-        { "stop_lat",            make_field_mapper(&stop::latitude)            },
-        { "stop_lon",            make_field_mapper(&stop::longitude)           },
-        { "zone_id",             make_field_mapper(&stop::zone_id)             },
-        { "stop_url",            make_field_mapper(&stop::stop_url)            },
-        { "location_type",       make_field_mapper(&stop::type)                },
-        { "parent_station",      make_field_mapper(&stop::parent_id)           },
-        { "stop_timezone",       make_field_mapper(&stop::timezone)            },
-        { "wheelchair_boarding", make_field_mapper(&stop::wheelchair_boarding) }
+        { "stop_id",             make_field_mapper(&stop::id)                     },
+        { "stop_code",           make_field_mapper(&stop::code)                   },
+        { "stop_name",           make_field_mapper(&stop::name)                   },
+        { "stop_desc",           make_field_mapper(&stop::description)            },
+        { "stop_lat",            make_field_mapper(&stop::latitude)               },
+        { "stop_lon",            make_field_mapper(&stop::longitude)              },
+        { "zone_id",             make_field_mapper(&stop::zone_id)                },
+        { "stop_url",            make_field_mapper(&stop::stop_url)               },
+        { "location_type",       make_field_mapper(&stop::type, 0)                },
+        { "parent_station",      make_field_mapper(&stop::parent_id)              },
+        { "stop_timezone",       make_field_mapper(&stop::timezone)               },
+        { "wheelchair_boarding", make_field_mapper(&stop::wheelchair_boarding, 0) }
       };
 
       field_map_t<stop_time> stop_time_fields = {
-        { "trip_id",             make_field_mapper(&stop_time::trip_id)        },
-        { "arrival_time",        make_field_mapper(&stop_time::arrival_time)   },
-        { "departure_time",      make_field_mapper(&stop_time::departure_time) },
-        { "stop_id",             make_field_mapper(&stop_time::stop_id)        },
-        { "stop_sequence",       make_field_mapper(&stop_time::index)          },
-        { "stop_headsign",       make_field_mapper(&stop_time::headsign)       },
-        { "pickup_type",         make_field_mapper(&stop_time::pickup_type)    },
-        { "drop_off_type",       make_field_mapper(&stop_time::dropoff_type)   },
-        { "shape_dist_traveled", make_field_mapper(&stop_time::distance)       },
-        { "timepoint",           make_field_mapper(&stop_time::timepoint)      }
+        { "trip_id",             make_field_mapper(&stop_time::trip_id)         },
+        { "arrival_time",        make_field_mapper(&stop_time::arrival_time)    },
+        { "departure_time",      make_field_mapper(&stop_time::departure_time)  },
+        { "stop_id",             make_field_mapper(&stop_time::stop_id)         },
+        { "stop_sequence",       make_field_mapper(&stop_time::index)           },
+        { "stop_headsign",       make_field_mapper(&stop_time::headsign)        },
+        { "pickup_type",         make_field_mapper(&stop_time::pickup_type, 0)  },
+        { "drop_off_type",       make_field_mapper(&stop_time::dropoff_type, 0) },
+        { "shape_dist_traveled", make_field_mapper(&stop_time::distance)        },
+        { "timepoint",           make_field_mapper(&stop_time::timepoint, true) }
       };
 
       field_map_t<transfer> transfer_fields = {
@@ -136,16 +136,16 @@ namespace gtfs {
       };
 
       field_map_t<trip> trip_fields {
-        { "route_id",              make_field_mapper(&trip::route_id)              },
-        { "service_id",            make_field_mapper(&trip::service_id)            },
-        { "trip_id",               make_field_mapper(&trip::id)                    },
-        { "trip_headsign",         make_field_mapper(&trip::headsign)              },
-        { "trip_short_name",       make_field_mapper(&trip::short_name)            },
-        { "direction_id",          make_field_mapper(&trip::direction_id)          },
-        { "block_id",              make_field_mapper(&trip::block_id)              },
-        { "shape_id",              make_field_mapper(&trip::shape_id)              },
-        { "wheelchair_accessible", make_field_mapper(&trip::wheelchair_accessible) },
-        { "bikes_allowed",         make_field_mapper(&trip::bikes_allowed)         }
+        { "route_id",              make_field_mapper(&trip::route_id)                 },
+        { "service_id",            make_field_mapper(&trip::service_id)               },
+        { "trip_id",               make_field_mapper(&trip::id)                       },
+        { "trip_headsign",         make_field_mapper(&trip::headsign)                 },
+        { "trip_short_name",       make_field_mapper(&trip::short_name)               },
+        { "direction_id",          make_field_mapper(&trip::direction_id)             },
+        { "block_id",              make_field_mapper(&trip::block_id)                 },
+        { "shape_id",              make_field_mapper(&trip::shape_id)                 },
+        { "wheelchair_accessible", make_field_mapper(&trip::wheelchair_accessible, 0) },
+        { "bikes_allowed",         make_field_mapper(&trip::bikes_allowed, 0)         }
       };
 
       // Parser objects for each type defined by GTFS.
