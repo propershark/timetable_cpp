@@ -3,9 +3,9 @@
 
 MsgPack do_visits_after_from_route(std::string stop_code, DateTime start, std::string route_name, int count) {
   std::vector<Visit> results;
-  auto &index = tt.st_indices["route.station.departure"];
-  auto stop   = tt.stops[stop_code];
-  auto route  = std::find_if(tt.routes.begin(), tt.routes.end(), [route_name](auto pair) {
+  auto &index = tt->st_indices["route.station.departure"];
+  auto stop   = tt->stops[stop_code];
+  auto route  = std::find_if(tt->routes.begin(), tt->routes.end(), [route_name](auto pair) {
     if(pair.second.short_name == route_name) return true;
     return false;
   })->second;
@@ -19,12 +19,12 @@ MsgPack do_visits_after_from_route(std::string stop_code, DateTime start, std::s
     for(auto it = bound; ; ++it) {
       auto stop_time = *it->second;
       if(stop_time.stop_id != stop.id) break;
-      if(!tt.is_active(stop_time, today)) continue;
+      if(!tt->is_active(stop_time, today)) continue;
 
       auto departure_dt = DateTime(today.date(), stop_time.departure_time);
       departure_dt.resolve();
 
-      results.push_back({stop_time, departure_dt, departure_dt, tt});
+      results.push_back({stop_time, departure_dt, departure_dt, *tt});
 
       if((int) results.size() >= count) goto finish;
     }

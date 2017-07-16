@@ -10,7 +10,7 @@
 #include "visit.h"
 
 
-extern Timetable::Timetable tt;
+extern Timetable::Timetable *tt;
 
 
 ////
