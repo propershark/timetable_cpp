@@ -17,6 +17,7 @@ namespace gtfs {
 
       transfer() = default;
 
+      void post_init() { };
 
       // Standard stream output
       friend std::ostream& operator<<(std::ostream& os, const transfer& t) {

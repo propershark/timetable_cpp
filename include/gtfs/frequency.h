@@ -19,6 +19,7 @@ namespace gtfs {
 
       frequency() = default;
 
+      void post_init() { };
 
       // Standard stream output
       friend std::ostream& operator<<(std::ostream& os, const frequency& f) {

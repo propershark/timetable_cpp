@@ -29,6 +29,7 @@ namespace gtfs {
 
       trip() = default;
 
+      void post_init() { };
 
       // Standard stream output
       friend std::ostream& operator<<(std::ostream& os, const trip& t) {

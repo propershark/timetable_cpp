@@ -96,6 +96,7 @@ namespace gtfs {
           }
         }
 
+        inst.post_init();
         return inst;
       };
 

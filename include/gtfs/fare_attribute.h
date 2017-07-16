@@ -21,6 +21,7 @@ namespace gtfs {
 
       fare_attribute() = default;
 
+      void post_init() { };
 
       // Standard stream output
       friend std::ostream& operator<<(std::ostream& os, const fare_attribute& fa) {

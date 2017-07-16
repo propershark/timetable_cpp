@@ -15,6 +15,7 @@ namespace gtfs {
 
       calendar_date() = default;
 
+      void post_init() { };
 
       // Standard stream output
       friend std::ostream& operator<<(std::ostream& os, const calendar_date& cd) {
