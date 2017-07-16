@@ -17,6 +17,16 @@ class DateTime {
       SECOND
     };
 
+    enum Weekday {
+      SUNDAY = 0,
+      MONDAY,
+      TUESDAY,
+      WEDNESDAY,
+      THURSDAY,
+      FRIDAY,
+      SATURDAY,
+    };
+
     static DateTime EPOCH;
 
 
@@ -85,6 +95,9 @@ class DateTime {
     // Return the string representation of this DateTime following the default
     // format `YYYYMMDD hh:mm:ss`.
     std::string to_string() const;
+    // Return the day of the week of this DateTime.
+    Weekday weekday() const;
+
 
     // Output the string returned by `to_string()` to the given stream.
     friend std::ostream& operator<<(std::ostream& os, const DateTime& dt) {
