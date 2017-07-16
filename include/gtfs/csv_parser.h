@@ -48,7 +48,7 @@ namespace gtfs {
         object_list_t list;
         initialize();
         std::string row;
-        while(std::getline(this->input, row)) list.push_back(_parse_line(row));
+        while(_getline(this->input, row)) list.push_back(_parse_line(row));
         finish();
         return list;
       };
@@ -107,8 +107,11 @@ namespace gtfs {
 
         std::istringstream header_stream(header_line);
         std::string column;
-        while(std::getline(header_stream, column, ','))
+        while(std::getline(header_stream, column, ',')) {
+          if (!column.empty() && column.back() == '\r')
+            column.pop_back();
           columns.push_back(column);
+        }
 
         return columns;
       };
@@ -147,6 +150,14 @@ namespace gtfs {
         }
 
         return tokens;
+      };
+
+      std::istream &_getline(std::istream &input, std::string &out) {
+        std::getline(input, out);
+        // Handle CRLF strings, which are valid gtfs line endings.
+        if (!out.empty() && out.back() == '\r')
+          out.pop_back();
+        return input;
       };
   };
 }
