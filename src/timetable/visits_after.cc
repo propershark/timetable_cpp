@@ -13,7 +13,7 @@ MsgPack do_visits_after(std::string stop_code, DateTime start, int count) {
     auto bound = today.date() == start.date() ? initial_bound : lower_bound;
 
     for(auto it = bound; ; ++it) {
-      auto stop_time = *it->second;
+      auto &stop_time = *it->second;
       if(stop_time.stop_id != stop.id) break;
       if(!tt->is_active(stop_time, today)) continue;
 

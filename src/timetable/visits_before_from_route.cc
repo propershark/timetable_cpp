@@ -17,7 +17,7 @@ MsgPack do_visits_before_from_route(std::string stop_code, DateTime end, std::st
     auto bound = today.date() == end.date() ? initial_bound : upper_bound--;
 
     for(auto it = bound; ; --it) {
-      auto stop_time = *it->second;
+      auto &stop_time = *it->second;
       if(stop_time.stop_id != stop.id) break;
       if(!tt->is_active(stop_time, today)) continue;
 
