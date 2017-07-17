@@ -29,6 +29,7 @@ namespace gtfs {
 
       void post_init() {
         if (short_name.empty()) short_name = long_name;
+        if (description.empty()) description = long_name;
       }
 
       // Standard stream output

@@ -19,7 +19,7 @@ void DateTime::resolve() {
     .tm_sec   = seconds,
     // Defaulting `isdst` to -1 forces `mktime` to determine whether DST is
     // in effect for this datetime.
-    .tm_isdst = 0
+    .tm_isdst = -1
   };
 
   std::mktime(&t);
