@@ -15,8 +15,6 @@ static void abort_usage() {
 };
 
 int main(int argc, char * const argv[]) {
-  using namespace std::placeholders;
-
   int ch;
   std::string transport_address;
   std::string gtfs_dir;
