@@ -26,7 +26,7 @@ MsgPack do_visits_between_from_route(std::string stop_code, DateTime start, Date
       if(departure_dt < start)  continue;
       if(departure_dt > end)    goto finish;
 
-      results.push_back({stop_time, departure_dt, departure_dt, *tt});
+      results.push_back({stop_time, departure_dt, departure_dt, tt});
 
       if((int) results.size() >= count) goto finish;
     }

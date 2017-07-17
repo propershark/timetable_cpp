@@ -17,11 +17,11 @@ class Visit {
     gtfs::trip&       trip;
     gtfs::route&      route;
 
-    Visit(gtfs::stop_time& st, DateTime arrival_dt, DateTime departure_dt, Timetable::Timetable& tt) :
+    Visit(gtfs::stop_time& st, DateTime arrival_dt, DateTime departure_dt, Timetable::Timetable *tt) :
         stop_time(st),
-        station(tt.stops[stop_time.stop_id]),
-        trip(tt.trips[stop_time.trip_id]),
-        route(tt.routes[trip.route_id]) {
+        station(tt->stops[stop_time.stop_id]),
+        trip(tt->trips[stop_time.trip_id]),
+        route(tt->routes[trip.route_id]) {
       arrival   = arrival_dt;
       departure = departure_dt;
     };

@@ -20,7 +20,7 @@ MsgPack do_visits_before(std::string stop_code, DateTime end, int count) {
       auto departure_dt = DateTime(today.date(), stop_time.departure_time);
       departure_dt.resolve();
 
-      results.push_back({stop_time, departure_dt, departure_dt, *tt});
+      results.push_back({stop_time, departure_dt, departure_dt, tt});
 
       if((int) results.size() >= count) goto finish;
     }

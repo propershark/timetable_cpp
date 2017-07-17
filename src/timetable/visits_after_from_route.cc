@@ -24,7 +24,7 @@ MsgPack do_visits_after_from_route(std::string stop_code, DateTime start, std::s
       auto departure_dt = DateTime(today.date(), stop_time.departure_time);
       departure_dt.resolve();
 
-      results.push_back({stop_time, departure_dt, departure_dt, *tt});
+      results.push_back({stop_time, departure_dt, departure_dt, tt});
 
       if((int) results.size() >= count) goto finish;
     }
