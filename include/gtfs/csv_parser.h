@@ -107,11 +107,8 @@ namespace gtfs {
 
         std::istringstream header_stream(header_line);
         std::string column;
-        while(std::getline(header_stream, column, ',')) {
-          if (!column.empty() && column.back() == '\r')
-            column.pop_back();
+        while(_getline(header_stream, column, ','))
           columns.push_back(column);
-        }
 
         return columns;
       };
@@ -152,12 +149,16 @@ namespace gtfs {
         return tokens;
       };
 
-      std::istream &_getline(std::istream &input, std::string &out) {
-        std::getline(input, out);
+      std::istream &_getline(std::istream &input, std::string &out, char delim) {
+        std::getline(input, out, delim);
         // Handle CRLF strings, which are valid gtfs line endings.
         if (!out.empty() && out.back() == '\r')
           out.pop_back();
         return input;
       };
+
+      std::istream &_getline(std::istream &input, std::string &out) {
+        return _getline(input, out, '\n');
+      }
   };
 }
