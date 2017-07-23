@@ -123,6 +123,9 @@ namespace gtfs {
         while(current < line.size()) {
           // The loop iterates once per token. The parsing of the token is done
           // by the control branches inside of the loop.
+
+          // Skip leading whitespace in the token.
+          while(line[current] == ' ') current++;
           token_start = current;
 
           // If the first character is a quote, the token is "quote-escaped",
