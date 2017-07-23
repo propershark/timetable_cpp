@@ -58,7 +58,7 @@ namespace gtfs {
 
       value_type next() {
         std::string row;
-        std::getline(this->input, row);
+        _getline(this->input, row);
         return _parse_line(row);
       };
 
@@ -103,7 +103,7 @@ namespace gtfs {
       std::vector<std::string> _parse_headers() {
         std::vector<std::string> columns;
         std::string header_line;
-        std::getline(this->input, header_line);
+        _getline(this->input, header_line);
 
         std::istringstream header_stream(header_line);
         std::string column;
