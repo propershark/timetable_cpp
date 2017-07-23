@@ -27,6 +27,10 @@ namespace gtfs {
 
       route() = default;
 
+      void post_init() {
+        if (short_name.empty()) short_name = long_name;
+        if (description.empty()) description = long_name;
+      }
 
       // Standard stream output
       friend std::ostream& operator<<(std::ostream& os, const route& r) {

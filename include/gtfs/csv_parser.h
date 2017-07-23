@@ -48,7 +48,7 @@ namespace gtfs {
         object_list_t list;
         initialize();
         std::string row;
-        while(std::getline(this->input, row)) list.push_back(_parse_line(row));
+        while(_getline(this->input, row)) list.push_back(_parse_line(row));
         finish();
         return list;
       };
@@ -58,7 +58,7 @@ namespace gtfs {
 
       value_type next() {
         std::string row;
-        std::getline(this->input, row);
+        _getline(this->input, row);
         return _parse_line(row);
       };
 
@@ -96,17 +96,18 @@ namespace gtfs {
           }
         }
 
+        inst.post_init();
         return inst;
       };
 
       std::vector<std::string> _parse_headers() {
         std::vector<std::string> columns;
         std::string header_line;
-        std::getline(this->input, header_line);
+        _getline(this->input, header_line);
 
         std::istringstream header_stream(header_line);
         std::string column;
-        while(std::getline(header_stream, column, ','))
+        while(_getline(header_stream, column, ','))
           columns.push_back(column);
 
         return columns;
@@ -122,6 +123,9 @@ namespace gtfs {
         while(current < line.size()) {
           // The loop iterates once per token. The parsing of the token is done
           // by the control branches inside of the loop.
+
+          // Skip leading whitespace in the token.
+          while(line[current] == ' ') current++;
           token_start = current;
 
           // If the first character is a quote, the token is "quote-escaped",
@@ -147,5 +151,17 @@ namespace gtfs {
 
         return tokens;
       };
+
+      std::istream &_getline(std::istream &input, std::string &out, char delim) {
+        std::getline(input, out, delim);
+        // Handle CRLF strings, which are valid gtfs line endings.
+        if (!out.empty() && out.back() == '\r')
+          out.pop_back();
+        return input;
+      };
+
+      std::istream &_getline(std::istream &input, std::string &out) {
+        return _getline(input, out, '\n');
+      }
   };
 }

@@ -3,8 +3,8 @@
 
 MsgPack do_visits_before(std::string stop_code, DateTime end, int count) {
   std::vector<Visit> results;
-  auto &index = tt.st_indices["station.departure"];
-  auto stop   = tt.stops[stop_code];
+  auto &index = tt->st_indices["station.departure"];
+  auto stop   = tt->stops[stop_code];
 
   auto upper_bound    = index.upper_bound(Timetable::next(stop.id));
   auto initial_bound  = index.upper_bound(stop.id + end.time());
@@ -13,9 +13,9 @@ MsgPack do_visits_before(std::string stop_code, DateTime end, int count) {
     auto bound = today.date() == end.date() ? initial_bound : upper_bound--;
 
     for(auto it = bound; ; --it) {
-      auto stop_time = *it->second;
+      auto &stop_time = *it->second;
       if(stop_time.stop_id != stop.id) break;
-      if(!tt.is_active(stop_time, today)) continue;
+      if(!tt->is_active(stop_time, today)) continue;
 
       auto departure_dt = DateTime(today.date(), stop_time.departure_time);
       departure_dt.resolve();

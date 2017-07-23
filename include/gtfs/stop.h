@@ -33,6 +33,9 @@ namespace gtfs {
 
       stop() = default;
 
+      void post_init() {
+        if (code.empty()) code = id;
+      };
 
       // Standard stream output
       friend std::ostream& operator<<(std::ostream& os, const stop& s) {

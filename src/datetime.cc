@@ -120,3 +120,12 @@ std::string DateTime::to_string() const {
   snprintf(buf, 18, "%04d%02d%02d %02d:%02d:%02d", years, months, days, hours, minutes, seconds);
   return { buf };
 };
+
+DateTime::Weekday DateTime::weekday() const {
+  // Sakamoto's method
+  static int offset[] = {0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4};
+  short ytmp = years;
+  ytmp -= months < 3;
+  return static_cast<DateTime::Weekday>((ytmp + ytmp/4 - ytmp/100 + ytmp/400 +
+                                         offset[months-1] + days) % 7);
+}

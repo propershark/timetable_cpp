@@ -29,6 +29,7 @@ namespace gtfs {
 
       stop_time() = default;
 
+      void post_init() { };
 
       // Standard stream output
       friend std::ostream& operator<<(std::ostream& os, const stop_time& st) {

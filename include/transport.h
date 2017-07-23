@@ -46,6 +46,7 @@ class Transport {
     void start() {
       wamp->connect([&]() {
         _perform_actions();
+        std::cout << "Connected to " << router_url << std::endl;
       });
       while(true) transport.process();
     };
@@ -65,7 +66,7 @@ class Transport {
       action_queue.push_front(new WampCallAction(topic, arguments, argumentsKW, callback));
     };
     template<typename Proc>
-    void procedure(std::string const &topic, Proc p, TRegisterCallback callback = nullptr) {
+    void procedure(std::string const &topic, Proc p, TRegisterCallback callback = _registered) {
       action_queue.push_front(new WampRegisterAction<Proc>(topic, p, callback));
     };
 
@@ -76,4 +77,9 @@ class Transport {
     void _perform_actions() {
       for(auto* next_action : action_queue) next_action->perform(wamp);
     };
+
+    static void _registered(URI err) {
+      if (!err.empty())
+        std::cerr << "Registration with transport failed: " << err << std::endl;
+    }
 };

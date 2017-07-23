@@ -21,6 +21,7 @@ namespace gtfs {
 
       feed_info() = default;
 
+      void post_init() { };
 
       // Standard stream output
       friend std::ostream& operator<<(std::ostream& os, const feed_info& fi) {
