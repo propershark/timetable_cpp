@@ -28,7 +28,7 @@ namespace gtfs {
       route() = default;
 
       void post_init() {
-        if (short_name.empty()) short_name = long_name;
+        if (short_name.empty()) short_name = id;
         if (description.empty()) description = long_name;
       }
 
