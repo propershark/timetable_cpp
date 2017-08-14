@@ -6,7 +6,7 @@ CXX ?= clang
 # Extension of source files used in the project
 SRC_EXT = cc
 # Path to the source directory, relative to the makefile
-SRC_PATH = src/
+SRC_PATH = src
 # Space-separated pkg-config libraries used by this project
 LIBS =
 # General compiler flags
@@ -218,3 +218,6 @@ $(BUILD_PATH)/%.o: $(SRC_PATH)/%.$(SRC_EXT)
 	$(CMD_PREFIX)$(CXX) $(CXXFLAGS) $(INCLUDES) -MP -MMD -c $< -o $@
 	@echo -en "\t Compile time: "
 	@$(END_TIME)
+
+print-%:
+	@echo '$*=$($*)'
