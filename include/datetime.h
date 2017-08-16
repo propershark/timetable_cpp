@@ -1,8 +1,10 @@
 #pragma once
 
+#include <ctime>
 #include <iostream>
 #include <ostream>
 #include <sstream>
+#include <tuple>
 
 
 class DateTime {

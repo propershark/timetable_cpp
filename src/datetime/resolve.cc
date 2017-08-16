@@ -8,19 +8,18 @@
 // ranges quic quickly becomes complex with varying-length months, leap years,
 // Daylight Savings Time, etc.
 void DateTime::resolve() {
-  std::tm t = {
-    // `tm_year` stores years since 1900. `years` is an absolute value.
-    .tm_year  = years - 1900,
-    // `tm_mon` starts at 0. `months` is a value in the range [1,12].
-    .tm_mon   = months - 1,
-    .tm_mday  = days,
-    .tm_hour  = hours,
-    .tm_min   = minutes,
-    .tm_sec   = seconds,
-    // Defaulting `isdst` to -1 forces `mktime` to determine whether DST is
-    // in effect for this datetime.
-    .tm_isdst = -1
-  };
+  std::tm t;
+  // `tm_year` stores years since 1900. `years` is an absolute value.
+  t.tm_year  = years - 1900;
+  // `tm_mon` starts at 0. `months` is a value in the range [1;12].
+  t.tm_mon   = months - 1;
+  t.tm_mday  = days;
+  t.tm_hour  = hours;
+  t.tm_min   = minutes;
+  t.tm_sec   = seconds;
+  // Defaulting `isdst` to -1 forces `mktime` to determine whether DST is
+  // in effect for this datetime.
+  t.tm_isdst = -1;
 
   std::mktime(&t);
 
