@@ -18,16 +18,27 @@ int main(int argc, char * const argv[]) {
   int ch;
   std::string transport_address;
   std::string gtfs_dir;
-  while ((ch = getopt(argc, argv, "-t:")) != -1) {
+  do {
+    ch = getopt(argc, argv, "-t:");
     switch (ch) {
       case 't': transport_address = optarg;
+                break;
+
+                // Detect gtfs_dir on linux.
+      case 1:   gtfs_dir = optarg;
+                break;
+
+                // Detect gtfs_dir on POSIX.
+      case -1:  if (optind < argc) gtfs_dir = argv[optind];
+                break;
+
       default:  break;
     }
-  }
+  } while (ch != -1);
 
   if (transport_address.empty())
     transport_address = "ws://localhost:8080/ws";
-  if (argc == optind || (gtfs_dir = argv[optind]).empty())
+  if (gtfs_dir.empty())
     abort_usage();
 
   tt = new Timetable::Timetable(gtfs_dir);
