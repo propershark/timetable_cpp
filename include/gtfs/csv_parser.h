@@ -120,7 +120,7 @@ namespace gtfs {
         size_t current         = 0;
         size_t token_start     = 0;
 
-        while(current < line.size()) {
+        while(current <= line.size()) {
           // The loop iterates once per token. The parsing of the token is done
           // by the control branches inside of the loop.
 
