@@ -34,9 +34,12 @@ namespace Timetable {
       };
 
       bool service_is_active(std::string service_id, DateTime date) {
-        for (auto it = exceptions.find(date); it != exceptions.end(); ++it)
-          for (auto exception_active = it->second.find(service_id); exception_active != it->second.end();)
+        auto exceptions_today = exceptions.find(date);
+        if (exceptions_today != exceptions.end()) {
+          auto exception_active = exceptions_today->second.find(service_id);
+          if (exception_active != exceptions_today->second.end())
             return exception_active->second;
+        }
 
         if (date < start_date[service_id] || date > end_date[service_id])
           return false;
