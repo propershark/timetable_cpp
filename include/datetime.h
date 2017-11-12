@@ -50,6 +50,9 @@ class DateTime {
       sscanf(date.c_str(), "%4hd%2hd%2hd", &years, &months, &days);
       sscanf(time.c_str(), "%2hd:%2hd:%2hd", &hours, &minutes, &seconds);
     };
+    DateTime(std::tm *t) : years(t->tm_year + 1900), months(t->tm_mon + 1), days(t->tm_mday), 
+      hours(t->tm_hour), minutes(t->tm_min), seconds(t->tm_sec) {};
+    DateTime(std::time_t seconds_since_epoch) : DateTime(std::gmtime(&seconds_since_epoch)) {};
 
     // Apply default values for entities with only a date or time part.
     static DateTime from_date(std::string date);
@@ -88,7 +91,9 @@ class DateTime {
 
     // Ensure that all values are within their bounds, carrying over surplus
     // values to higher unit places (e.g., 32 days becomes 1 month + 1-4 days).
-    void resolve();
+    //
+    // Returns the number of seconds since EPOCH.
+    std::time_t resolve();
 
     // Return the string representation of this DateTime as `YYYYMMDD`.
     std::string date() const;

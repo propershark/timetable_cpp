@@ -89,6 +89,9 @@ namespace Timetable {
           auto& visit_list = pair.second;
           gtfs::stop_time last_timepoint;
           gtfs::stop_time next_timepoint;
+          long last_departure; // in epoch seconds
+          long next_arrival;
+          long travel_time;
           double timepoint_distance = 0;
 
           for(auto it = visit_list.begin(); it != visit_list.end(); ++it) {
@@ -98,20 +101,28 @@ namespace Timetable {
             // next_timepoint.
             if(visit.departure_time != "") {
               last_timepoint = visit;
-              for(auto next = it; next != visit_list.end(); ++next) {
+              last_departure = DateTime::from_time(visit.departure_time).resolve();
+              for(auto next = std::next(it, 1); next != visit_list.end(); ++next) {
                 auto& next_visit = next->second;
                 if(next_visit.departure_time != "") {
                   next_timepoint = next_visit;
+                  next_arrival = DateTime::from_time(next_visit.arrival_time).resolve();
+                  travel_time = next_arrival - last_departure;
                   break;
                 }
               }
 
               timepoint_distance = next_timepoint.distance - last_timepoint.distance;
             } else {
-              // auto percent_traveled = visit.distance / timepoint_distance;
-              // visit.departure_time = last_timepoint.departure_time + percent_traveled;
-              visit.departure_time = last_timepoint.departure_time;
-              visit.arrival_time = last_timepoint.arrival_time;
+              auto percent_traveled = visit.distance / timepoint_distance;
+              auto interpolated = DateTime(last_departure + 
+                                           travel_time * percent_traveled);
+              auto timestamp = interpolated.time();
+
+              visit.arrival_time = timestamp;
+              // Since this stop is not a timepoint, assume a dwell time of 0,
+              // and set the departure time to the arrival time.
+              visit.departure_time = timestamp;
             }
 
             add_visit(visit);
